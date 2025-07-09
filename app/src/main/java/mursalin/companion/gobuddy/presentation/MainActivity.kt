@@ -1,4 +1,4 @@
-package mursalin.companion.gobuddy
+package mursalin.companion.gobuddy.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import mursalin.companion.gobuddy.ui.theme.GoBuddyTheme
+import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

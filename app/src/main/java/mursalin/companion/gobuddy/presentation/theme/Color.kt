@@ -1,4 +1,4 @@
-package mursalin.companion.gobuddy.ui.theme
+package mursalin.companion.gobuddy.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
