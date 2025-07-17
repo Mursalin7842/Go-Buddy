@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             GoBuddyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Android is initializing ",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
