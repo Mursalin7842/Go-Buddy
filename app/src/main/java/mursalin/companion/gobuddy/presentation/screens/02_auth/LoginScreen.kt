@@ -8,14 +8,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.rive.runtime.kotlin.core.Rive
+import app.rive.runtime.kotlin.compose.RiveAnimation
+import app.rive.runtime.kotlin.core.SMIBoolean
+import app.rive.runtime.kotlin.core.SMITrigger
+import app.rive.runtime.kotlin.core.StateMachine
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
 
 @Composable

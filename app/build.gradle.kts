@@ -56,4 +56,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("app.rive:rive-android:10.2.1")
+    implementation("androidx.startup:startup-runtime:1.2.0")
+    implementation("app.rive:rive-android:10.2.1") // Core Rive runtime
+    implementation("app.rive:rive-compose:5.2.0") // Rive integration for Jetpack Compose
 }
