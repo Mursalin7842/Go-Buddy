@@ -12,17 +12,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-
-        primary = Color(0xFFBB86FC),
-        secondary = Color(0xFF03DAC6),
-        tertiary = Color(0xFF3700B3),
-        background = Color(0xFF121212),
-        surface = Color(0xFF1E1E1E),
-        onPrimary = Color.Black,
-        onSecondary = Color.Black,
-        onTertiary = Color.White,
-        onBackground = Color.White,
-        onSurface = Color.White,
+    primary = Color(0xFFBB86FC),
+    secondary = Color(0xFF03DAC6),
+    tertiary = Color(0xFF3700B3),
+    background = Color(0xFF121212),
+    surface = Color(0xFF1E1E1E),
+    onPrimary = Color.Black,
+    onSecondary = Color.Black,
+    onTertiary = Color.White,
+    onBackground = Color.White,
+    onSurface = Color.White,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -36,19 +35,7 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color.White,
     onBackground = Color.Black,
     onSurface = Color.Black,
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
-
-
 
 @Composable
 fun GoBuddyTheme(
@@ -73,3 +60,4 @@ fun GoBuddyTheme(
         content = content
     )
 }
+
