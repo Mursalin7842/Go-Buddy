@@ -65,4 +65,5 @@ dependencies {
     // For build.gradle.kts
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended.android)
+    implementation(libs.androidx.constraintlayout)
 }
