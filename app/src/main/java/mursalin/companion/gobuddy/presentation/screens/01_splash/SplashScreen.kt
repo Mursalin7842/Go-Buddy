@@ -79,32 +79,32 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 
     // --- Animation Choreography ---
     LaunchedEffect(Unit) {
-        // Phase 1: Fall from the sky to the center
+        // Phase 1: Fall from the sky to the center, remaining upside down
         animState = SplashAnimState.FALLING
         targetOffsetY = 0.dp
-        delay(1200) // Wait for the fall to complete
+        delay(1000) // Wait for the fall to complete
 
         // Phase 2: Roam randomly while rotating to be upright
         animState = SplashAnimState.ROAMING
-        repeat(4) { // Perform 4 random movements
-            targetOffsetX = Random.nextInt(-80, 80).dp
-            targetOffsetY = Random.nextInt(-120, 120).dp
-            delay(400)
+        repeat(10) { // Perform 4 random movements
+            targetOffsetX = Random.nextInt(-200, 200).dp
+            targetOffsetY = Random.nextInt(-400, 400).dp
+            delay(500)
         }
 
         // Phase 3: Return to center
         animState = SplashAnimState.CENTERING
         targetOffsetX = 0.dp
         targetOffsetY = 0.dp
-        delay(1000) // Wait to settle
+        delay(300) // Wait to settle
 
         // Phase 4: Hold in the center for 2 seconds
         animState = SplashAnimState.VISIBLE
-        delay(2000)
+        delay(250)
 
         // Phase 5: Zoom in to finish
         animState = SplashAnimState.ZOOMING
-        delay(800)
+        delay(500)
 
         onSplashFinished()
     }
