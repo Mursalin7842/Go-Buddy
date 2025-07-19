@@ -8,14 +8,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,32 +27,37 @@ import androidx.media3.ui.PlayerView
 import kotlinx.coroutines.delay
 import mursalin.companion.gobuddy.R
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
-import kotlin.random.Random
+import kotlin.math.cos
+import kotlin.math.sin
 
 // Enum to manage the different animation states
 private enum class SplashAnimState {
-    JUMPING, CENTERING, ZOOMING
+    ENTERING, // Dropping in from top, upside down
+    CIRCLING, // Moving in a circular path and rotating to be upright
+    ZOOMING   // Final zoom and fade
 }
 
 @Composable
 fun SplashScreen(onSplashFinished: () -> Unit) {
     val context = LocalContext.current
-    var animState by remember { mutableStateOf(SplashAnimState.JUMPING) }
+    var animState by remember { mutableStateOf(SplashAnimState.ENTERING) }
 
     // --- Animation States ---
-    var targetOffsetX by remember { mutableStateOf(0.dp) }
-    var targetOffsetY by remember { mutableStateOf(0.dp) }
+    var angle by remember { mutableStateOf(0f) }
+    var targetRotation by remember { mutableStateOf(180f) }
 
-    // Animate the X and Y offsets for the jumping and centering effect
-    val animatedOffsetX by animateDpAsState(
-        targetValue = targetOffsetX,
-        animationSpec = spring(dampingRatio = 0.4f, stiffness = 200f),
-        label = "SplashOffsetX"
+    // Animate the angle for the circular motion
+    val animatedAngle by animateFloatAsState(
+        targetValue = angle,
+        animationSpec = tween(durationMillis = 2000), // 2 seconds for circular motion
+        label = "SplashAngle"
     )
-    val animatedOffsetY by animateDpAsState(
-        targetValue = targetOffsetY,
-        animationSpec = spring(dampingRatio = 0.4f, stiffness = 200f),
-        label = "SplashOffsetY"
+
+    // Animate the rotation
+    val animatedRotation by animateFloatAsState(
+        targetValue = targetRotation,
+        animationSpec = tween(durationMillis = 2000), // Match circular motion duration
+        label = "SplashRotation"
     )
 
     // Animate the scale for the final zoom-in effect
@@ -85,21 +89,21 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     // --- Animation Choreography ---
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp
-    val screenHeightDp = configuration.screenHeightDp.dp
+
+    // Calculate circular path offsets based on the animated angle
+    val radius = 120.dp
+    val offsetX = (radius.value * cos(Math.toRadians(animatedAngle.toDouble()))).dp
+    val offsetY = (radius.value * sin(Math.toRadians(animatedAngle.toDouble()))).dp
 
     LaunchedEffect(Unit) {
-        // Phase 1: Jump around randomly
-        repeat(5) { // Perform 5 jumps
-            targetOffsetX = Random.nextInt(-80, 80).dp
-            targetOffsetY = Random.nextInt(-150, 150).dp
-            delay(300)
-        }
+        // Phase 1: Drop in from top (handled by initial state)
+        delay(100) // Small delay to start animations
 
-        // Phase 2: Come to the center
-        animState = SplashAnimState.CENTERING
-        targetOffsetX = 0.dp
-        targetOffsetY = 0.dp
-        delay(1000) // Wait for it to settle in the center
+        // Phase 2: Start circular motion and rotation to upright
+        animState = SplashAnimState.CIRCLING
+        angle = 720f      // Two full circles
+        targetRotation = 0f // Rotate to be upright
+        delay(2200) // Wait for circling to finish
 
         // Phase 3: Zoom in to finish
         animState = SplashAnimState.ZOOMING
@@ -122,7 +126,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             .background(Color(0xFF5c10ff)), // Custom background color
         contentAlignment = Alignment.Center
     ) {
-        // The AndroidView hosts the video player. We animate its offset and scale.
+        // The AndroidView hosts the video player. We use graphicsLayer for efficient animation.
         AndroidView(
             factory = {
                 PlayerView(it).apply {
@@ -136,19 +140,24 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             },
             modifier = Modifier
                 .size(width = screenWidthDp * 0.7f, height = screenWidthDp * 0.7f)
-                .offset(x = animatedOffsetX, y = animatedOffsetY)
-                .scale(animatedScale)
-                .alpha(animatedAlpha)
+                .graphicsLayer {
+                    // Apply all transformations here
+                    translationX = if (animState == SplashAnimState.CIRCLING) offsetX.toPx() else 0f
+                    translationY = if (animState == SplashAnimState.CIRCLING) offsetY.toPx() else 0f
+                    rotationZ = animatedRotation
+                    scaleX = animatedScale
+                    scaleY = animatedScale
+                    alpha = animatedAlpha
+                }
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun SplashScreenPreview() {
     GoBuddyTheme {
-        // Note: The video player and animations will not work correctly in this preview.
+        // Note: The complex animations and video player will not work correctly in this preview.
         // It will likely appear as a blank screen, which is expected.
         SplashScreen(onSplashFinished = {})
     }
