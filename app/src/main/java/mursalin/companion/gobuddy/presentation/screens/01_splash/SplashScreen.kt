@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,7 +79,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     // --- Lifecycle & Animation Choreography ---
     LaunchedEffect(Unit) {
         splashState = SplashState.POP_IN // Start the pop-in animation
-        delay(3000) // Wait for 3 seconds while video is visible
+        delay(1000) // Wait for 1 second while video is visible
         splashState = SplashState.FADE_OUT // Start the fade-out animation
         delay(1000) // Wait for fade-out to complete
         onSplashFinished()
@@ -93,6 +95,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFF5c10ff)) // Set the custom background color
             .alpha(animatedAlpha), // Apply fade-out to the whole screen
         contentAlignment = Alignment.Center
     ) {
