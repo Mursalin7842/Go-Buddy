@@ -22,6 +22,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.core.Rive
 import app.rive.runtime.kotlin.core.SMIBoolean
+import app.rive.runtime.kotlin.core.SMITrigger
 import app.rive.runtime.kotlin.core.StateMachineInstance
 import mursalin.companion.gobuddy.R
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
@@ -84,13 +85,13 @@ fun LoginScreen(
                         update = { view ->
                             // Find the state machine instance if we haven't already
                             if (stateMachine == null) {
-                                stateMachine = view.controller.findStateMachine("State Machine 1")
+                                stateMachine = view.controller.stateMachines.firstOrNull()
                             }
 
                             // Update the state machine's inputs based on our composable's state
                             stateMachine?.let { sm ->
-                                val isCheckingInput = sm.getBoolean("isChecking")
-                                val isHandsUpInput = sm.getBoolean("isHandsUp")
+                                val isCheckingInput = sm.getInput("isChecking") as? SMIBoolean
+                                val isHandsUpInput = sm.getInput("isHandsUp") as? SMIBoolean
 
                                 isCheckingInput?.value = isChecking
                                 isHandsUpInput?.value = isHandsUp
@@ -177,11 +178,11 @@ fun LoginScreen(
                         isHandsUp = false
                         isChecking = false
 
-                        // Fire triggers using the correct state machine instance
+                        // Fire triggers by getting the input and calling .fire()
                         if (email == "admin" && password == "admin") {
-                            stateMachine?.fireTrigger("success")
+                            (stateMachine?.getInput("success") as? SMITrigger)?.fire()
                         } else {
-                            stateMachine?.fireTrigger("fail")
+                            (stateMachine?.getInput("fail") as? SMITrigger)?.fire()
                         }
 
                         onLoginClick()
