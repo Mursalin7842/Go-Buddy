@@ -50,12 +50,17 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 
     var targetOffsetX by remember { mutableStateOf(0.dp) }
     var targetOffsetY by remember { mutableStateOf(-screenHeightDp) } // Start off-screen top
-    var targetRotation by remember { mutableStateOf(180f) } // Start upside down
 
-    // Animate position and rotation
+    // Animate position
     val animatedOffsetX by animateDpAsState(targetValue = targetOffsetX, animationSpec = spring(dampingRatio = 0.6f, stiffness = 150f), label = "SplashOffsetX")
     val animatedOffsetY by animateDpAsState(targetValue = targetOffsetY, animationSpec = spring(dampingRatio = 0.6f, stiffness = 150f), label = "SplashOffsetY")
-    val animatedRotation by animateFloatAsState(targetValue = targetRotation, animationSpec = tween(durationMillis = 1500), label = "SplashRotation")
+
+    // Animate rotation based on the current animation state
+    val animatedRotation by animateFloatAsState(
+        targetValue = if (animState == SplashAnimState.IDLE || animState == SplashAnimState.FALLING) 180f else 0f,
+        animationSpec = tween(durationMillis = 1500),
+        label = "SplashRotation"
+    )
 
     // Animate the final zoom and fade
     val animatedScale by animateFloatAsState(targetValue = if (animState == SplashAnimState.ZOOMING) 8f else 1f, animationSpec = tween(800), label = "SplashScale")
@@ -77,11 +82,10 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
         // Phase 1: Fall from the sky to the center
         animState = SplashAnimState.FALLING
         targetOffsetY = 0.dp
-        delay(1000)
+        delay(1200) // Wait for the fall to complete
 
         // Phase 2: Roam randomly while rotating to be upright
         animState = SplashAnimState.ROAMING
-        targetRotation = 0f // Start rotating to upright position
         repeat(4) { // Perform 4 random movements
             targetOffsetX = Random.nextInt(-80, 80).dp
             targetOffsetY = Random.nextInt(-120, 120).dp
