@@ -15,14 +15,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.core.Rive
-import app.rive.runtime.kotlin.compose.RiveAnimation
 import app.rive.runtime.kotlin.core.SMIBoolean
-import app.rive.runtime.kotlin.core.SMITrigger
-import app.rive.runtime.kotlin.core.StateMachine
+import app.rive.runtime.kotlin.core.StateMachineInstance
+import mursalin.companion.gobuddy.R
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
+
+// Added missing imports for property delegates
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun LoginScreen(
@@ -31,6 +37,19 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    // State holders for Rive animation inputs
+    var isChecking by remember { mutableStateOf(false) }
+    var isHandsUp by remember { mutableStateOf(false) }
+
+    // Corrected state holder for the Rive state machine instance
+    var stateMachine by remember { mutableStateOf<StateMachineInstance?>(null) }
+
+    // Initialize Rive
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        Rive.init(context)
+    }
 
     GoBuddyTheme {
         Surface(
@@ -44,6 +63,44 @@ fun LoginScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Rive Animation View
+                Box(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                ) {
+                    AndroidView(
+                        factory = { ctx ->
+                            RiveAnimationView(ctx).apply {
+                                // Set the Rive resource and specify the state machine name
+                                setRiveResource(
+                                    R.raw.login_animation,
+                                    stateMachineName = "State Machine 1",
+                                    autoplay = true
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                        update = { view ->
+                            // Find the state machine instance if we haven't already
+                            if (stateMachine == null) {
+                                stateMachine = view.controller.findStateMachine("State Machine 1")
+                            }
+
+                            // Update the state machine's inputs based on our composable's state
+                            stateMachine?.let { sm ->
+                                val isCheckingInput = sm.getBoolean("isChecking")
+                                val isHandsUpInput = sm.getBoolean("isHandsUp")
+
+                                isCheckingInput?.value = isChecking
+                                isHandsUpInput?.value = isHandsUp
+                            }
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
                 Text(
                     text = "Welcome Back!",
                     style = MaterialTheme.typography.headlineLarge,
@@ -61,12 +118,20 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(48.dp))
 
-                // Email Text Field
+                // Email Field
                 OutlinedTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        email = it
+                        isChecking = it.isNotEmpty()
+                    },
                     label = { Text("Email") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged {
+                            // When focus changes on the email field, the hands should not be up
+                            isHandsUp = false
+                        },
                     shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     singleLine = true
@@ -74,12 +139,17 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Password Text Field
+                // Password Field
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Password") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { focusState ->
+                            // Hands go up only when the password field is focused
+                            isHandsUp = focusState.isFocused
+                        },
                     shape = RoundedCornerShape(12.dp),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -93,7 +163,7 @@ fun LoginScreen(
                     text = "Forgot Password?",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { /* Handle Forgot Password */ },
+                        .clickable { /* Handle forgot password */ },
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
@@ -103,7 +173,19 @@ fun LoginScreen(
 
                 // Login Button
                 Button(
-                    onClick = onLoginClick,
+                    onClick = {
+                        isHandsUp = false
+                        isChecking = false
+
+                        // Fire triggers using the correct state machine instance
+                        if (email == "admin" && password == "admin") {
+                            stateMachine?.fireTrigger("success")
+                        } else {
+                            stateMachine?.fireTrigger("fail")
+                        }
+
+                        onLoginClick()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -139,9 +221,10 @@ fun LoginScreen(
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
+fun LoginPreview() {
     LoginScreen(
         onLoginClick = {},
         onSignUpClick = {}

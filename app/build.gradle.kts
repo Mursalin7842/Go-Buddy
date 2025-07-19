@@ -31,8 +31,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     buildFeatures {
         compose = true
@@ -57,8 +59,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("app.rive:rive-android:10.2.1")
-    implementation("androidx.startup:startup-runtime:1.2.0")
-    implementation("app.rive:rive-android:10.2.1") // Core Rive runtime
-    implementation("app.rive:rive-compose:5.2.0") // Rive integration for Jetpack Compose
+    // Cleaned up Rive dependencies
+    implementation(libs.androidx.startup.runtime)
+    implementation(libs.rive.android)
+    implementation(libs.rive.compose)
+    implementation(libs.lottie.compose)
 }
