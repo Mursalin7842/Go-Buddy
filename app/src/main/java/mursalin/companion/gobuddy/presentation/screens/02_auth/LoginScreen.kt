@@ -21,9 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.core.Rive
-import app.rive.runtime.kotlin.core.SMIBoolean
-import app.rive.runtime.kotlin.core.SMITrigger
-import app.rive.runtime.kotlin.core.StateMachineInstance
 import mursalin.companion.gobuddy.R
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
 
@@ -43,8 +40,9 @@ fun LoginScreen(
     var isChecking by remember { mutableStateOf(false) }
     var isHandsUp by remember { mutableStateOf(false) }
 
-    // Corrected state holder for the Rive state machine instance
-    var stateMachine by remember { mutableStateOf<StateMachineInstance?>(null) }
+    // State holder for the Rive animation controller
+    var riveController by remember { mutableStateOf<RiveAnimationView.RiveAnimationController?>(null) }
+    val stateMachineName = "State Machine 1"
 
     // Initialize Rive
     val context = LocalContext.current
@@ -76,26 +74,21 @@ fun LoginScreen(
                                 // Set the Rive resource and specify the state machine name
                                 setRiveResource(
                                     R.raw.login_animation,
-                                    stateMachineName = "State Machine 1",
+                                    stateMachineName = stateMachineName,
                                     autoplay = true
                                 )
                             }
                         },
                         modifier = Modifier.fillMaxSize(),
                         update = { view ->
-                            // Find the state machine instance if we haven't already
-                            if (stateMachine == null) {
-                                stateMachine = view.controller.stateMachines.firstOrNull()
+                            // Store the controller for use outside the update block (e.g., in onClick)
+                            if (riveController == null) {
+                                riveController = view.controller
                             }
 
-                            // Update the state machine's inputs based on our composable's state
-                            stateMachine?.let { sm ->
-                                val isCheckingInput = sm.getInput("isChecking") as? SMIBoolean
-                                val isHandsUpInput = sm.getInput("isHandsUp") as? SMIBoolean
-
-                                isCheckingInput?.value = isChecking
-                                isHandsUpInput?.value = isHandsUp
-                            }
+                            // Update the state machine's inputs using the public controller methods
+                            view.controller.setBooleanState(stateMachineName, "isChecking", isChecking)
+                            view.controller.setBooleanState(stateMachineName, "isHandsUp", isHandsUp)
                         }
                     )
                 }
@@ -178,11 +171,11 @@ fun LoginScreen(
                         isHandsUp = false
                         isChecking = false
 
-                        // Fire triggers by getting the input and calling .fire()
+                        // Fire triggers using the public controller method
                         if (email == "admin" && password == "admin") {
-                            (stateMachine?.getInput("success") as? SMITrigger)?.fire()
+                            riveController?.fireTrigger(stateMachineName, "success")
                         } else {
-                            (stateMachine?.getInput("fail") as? SMITrigger)?.fire()
+                            riveController?.fireTrigger(stateMachineName, "fail")
                         }
 
                         onLoginClick()
