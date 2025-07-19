@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import mursalin.companion.gobuddy.presentation.screens.`02_auth`.ForgetPasswordScreen
+import mursalin.companion.gobuddy.presentation.screens.`02_auth`.ForgotPasswordScreen
 import mursalin.companion.gobuddy.presentation.screens.`02_auth`.LoginScreen
 import mursalin.companion.gobuddy.presentation.screens.`02_auth`.SignUpScreen
 import mursalin.companion.gobuddy.presentation.screens.`03_dashboard`.DashboardScreen
