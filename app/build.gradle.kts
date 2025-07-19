@@ -59,9 +59,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Cleaned up Rive dependencies
-    implementation(libs.androidx.startup.runtime)
-    implementation(libs.rive.android)
-    implementation(libs.rive.compose)
-    implementation(libs.lottie.compose)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // For build.gradle.kts
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material.icons.extended.android)
 }
