@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import app.rive.runtime.kotlin.RiveAnimationView
+import app.rive.runtime.kotlin.RiveFileController
 import app.rive.runtime.kotlin.core.Rive
 import mursalin.companion.gobuddy.R
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
@@ -40,8 +41,8 @@ fun LoginScreen(
     var isChecking by remember { mutableStateOf(false) }
     var isHandsUp by remember { mutableStateOf(false) }
 
-    // State holder for the Rive animation controller
-    var riveController by remember { mutableStateOf<RiveAnimationView.RiveAnimationController?>(null) }
+    // State holder for the Rive animation controller, using the correct RiveFileController type
+    var riveController by remember { mutableStateOf<RiveFileController?>(null) }
     val stateMachineName = "State Machine 1"
 
     // Initialize Rive
