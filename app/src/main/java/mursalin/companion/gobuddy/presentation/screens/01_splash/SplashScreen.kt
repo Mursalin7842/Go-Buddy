@@ -1,7 +1,6 @@
 package mursalin.companion.gobuddy.presentation.screens.`01_splash`
 
 import android.net.Uri
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -9,15 +8,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -28,39 +28,45 @@ import androidx.media3.ui.PlayerView
 import kotlinx.coroutines.delay
 import mursalin.companion.gobuddy.R
 import mursalin.companion.gobuddy.presentation.theme.GoBuddyTheme
+import kotlin.random.Random
 
-// Enum to manage the different animation states of the splash screen
-private enum class SplashState {
-    IDLE, POP_IN, VISIBLE, FADE_OUT
+// Enum to manage the different animation states
+private enum class SplashAnimState {
+    JUMPING, CENTERING, ZOOMING
 }
 
 @Composable
 fun SplashScreen(onSplashFinished: () -> Unit) {
     val context = LocalContext.current
-    var splashState by remember { mutableStateOf(SplashState.IDLE) }
+    var animState by remember { mutableStateOf(SplashAnimState.JUMPING) }
 
     // --- Animation States ---
-    val screenHeight = with(LocalDensity.current) {
-        LocalContext.current.resources.displayMetrics.heightPixels.toDp()
-    }
+    var targetOffsetX by remember { mutableStateOf(0.dp) }
+    var targetOffsetY by remember { mutableStateOf(0.dp) }
 
-    // Animate the Y offset for the pop-in effect
+    // Animate the X and Y offsets for the jumping and centering effect
+    val animatedOffsetX by animateDpAsState(
+        targetValue = targetOffsetX,
+        animationSpec = spring(dampingRatio = 0.4f, stiffness = 200f),
+        label = "SplashOffsetX"
+    )
     val animatedOffsetY by animateDpAsState(
-        targetValue = when (splashState) {
-            SplashState.IDLE -> screenHeight // Start below the screen
-            else -> 0.dp // Move to the center
-        },
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
+        targetValue = targetOffsetY,
+        animationSpec = spring(dampingRatio = 0.4f, stiffness = 200f),
         label = "SplashOffsetY"
     )
 
-    // Animate the alpha for the fade-out effect
+    // Animate the scale for the final zoom-in effect
+    val animatedScale by animateFloatAsState(
+        targetValue = if (animState == SplashAnimState.ZOOMING) 8f else 1f,
+        animationSpec = tween(durationMillis = 800),
+        label = "SplashScale"
+    )
+
+    // Animate alpha to fade out during the zoom
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (splashState == SplashState.FADE_OUT) 0f else 1f,
-        animationSpec = tween(durationMillis = 1000),
+        targetValue = if (animState == SplashAnimState.ZOOMING) 0f else 1f,
+        animationSpec = tween(durationMillis = 800),
         label = "SplashAlpha"
     )
 
@@ -76,12 +82,30 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
         }
     }
 
-    // --- Lifecycle & Animation Choreography ---
+    // --- Animation Choreography ---
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
+    val screenHeightDp = configuration.screenHeightDp.dp
+
     LaunchedEffect(Unit) {
-        splashState = SplashState.POP_IN // Start the pop-in animation
-        delay(1000) // Wait for 1 second while video is visible
-        splashState = SplashState.FADE_OUT // Start the fade-out animation
-        delay(1000) // Wait for fade-out to complete
+        // Phase 1: Jump around randomly
+        repeat(5) { // Perform 5 jumps
+            targetOffsetX = Random.nextInt(-80, 80).dp
+            targetOffsetY = Random.nextInt(-150, 150).dp
+            delay(300)
+        }
+
+        // Phase 2: Come to the center
+        animState = SplashAnimState.CENTERING
+        targetOffsetX = 0.dp
+        targetOffsetY = 0.dp
+        delay(1000) // Wait for it to settle in the center
+
+        // Phase 3: Zoom in to finish
+        animState = SplashAnimState.ZOOMING
+        delay(800) // Wait for zoom animation to complete
+
+        // Finish the splash
         onSplashFinished()
     }
 
@@ -95,11 +119,10 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF5c10ff)) // Set the custom background color
-            .alpha(animatedAlpha), // Apply fade-out to the whole screen
+            .background(Color(0xFF5c10ff)), // Custom background color
         contentAlignment = Alignment.Center
     ) {
-        // The AndroidView hosts the video player. We animate its offset.
+        // The AndroidView hosts the video player. We animate its offset and scale.
         AndroidView(
             factory = {
                 PlayerView(it).apply {
@@ -112,11 +135,14 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
                 }
             },
             modifier = Modifier
-                .fillMaxWidth(0.8f) // Make video take 80% of screen width
-                .offset(y = animatedOffsetY)
+                .size(width = screenWidthDp * 0.7f, height = screenWidthDp * 0.7f)
+                .offset(x = animatedOffsetX, y = animatedOffsetY)
+                .scale(animatedScale)
+                .alpha(animatedAlpha)
         )
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
