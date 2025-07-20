@@ -89,7 +89,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
         repeat(10) { // Perform 4 random movements
             targetOffsetX = Random.nextInt(-200, 200).dp
             targetOffsetY = Random.nextInt(-400, 400).dp
-            delay(500)
+            delay(50)
         }
 
         // Phase 3: Return to center
@@ -104,7 +104,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 
         // Phase 5: Zoom in to finish
         animState = SplashAnimState.ZOOMING
-        delay(500)
+        delay(250)
 
         onSplashFinished()
     }
