@@ -1,4 +1,4 @@
-package mursalin.companion.gobuddy.presentation.screens.`01_splash`
+package mursalin.companion.gobuddy.presentation.screens.s01splash
 
 import android.net.Uri
 import androidx.compose.animation.core.animateDpAsState
@@ -69,6 +69,8 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     // --- ExoPlayer Setup ---
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
+            // IMPORTANT: You need to add a 'splash_video.mp4' file to your
+            // 'res/raw' directory for this to work.
             val videoUri = Uri.parse("android.resource://${context.packageName}/${R.raw.splash_video}")
             setMediaItem(MediaItem.fromUri(videoUri))
             prepare()
@@ -86,7 +88,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 
         // Phase 2: Roam randomly while rotating to be upright
         animState = SplashAnimState.ROAMING
-        repeat(10) { // Perform 4 random movements
+        repeat(10) { // Perform random movements
             targetOffsetX = Random.nextInt(-200, 200).dp
             targetOffsetY = Random.nextInt(-400, 400).dp
             delay(50)
@@ -98,7 +100,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
         targetOffsetY = 0.dp
         delay(300) // Wait to settle
 
-        // Phase 4: Hold in the center for 2 seconds
+        // Phase 4: Hold in the center
         animState = SplashAnimState.VISIBLE
         delay(250)
 
@@ -127,7 +129,8 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
                 PlayerView(it).apply {
                     player = exoPlayer
                     useController = false
-                    layoutParams = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
+                    // Using an appropriate layout params class
+                    layoutParams = android.widget.FrameLayout.LayoutParams(
                         android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                         android.view.ViewGroup.LayoutParams.MATCH_PARENT
                     )

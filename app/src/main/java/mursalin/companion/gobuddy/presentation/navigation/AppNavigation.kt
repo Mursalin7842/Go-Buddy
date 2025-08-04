@@ -1,79 +1,70 @@
 package mursalin.companion.gobuddy.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
-import mursalin.companion.gobuddy.presentation.screens.`02_auth`.ForgotPasswordScreen
-import mursalin.companion.gobuddy.presentation.screens.`02_auth`.LoginScreen
-import mursalin.companion.gobuddy.presentation.screens.`02_auth`.SignUpScreen
-import mursalin.companion.gobuddy.presentation.screens.`03_dashboard`.DashboardScreen
-import mursalin.companion.gobuddy.presentation.screens.`01_splash`.SplashScreen
+import mursalin.companion.gobuddy.presentation.screens.s02auth.ForgotPasswordScreen
+import mursalin.companion.gobuddy.presentation.screens.s02auth.LoginScreen
+import mursalin.companion.gobuddy.presentation.screens.s02auth.SignUpScreen
+import mursalin.companion.gobuddy.presentation.screens.s03dashboard.DashboardScreen
+import mursalin.companion.gobuddy.presentation.screens.s01splash.SplashScreen
 import mursalin.companion.gobuddy.presentation.viewmodel.AuthViewModel
 
-object Route {
-    const val SPLASH = "splash"
-    const val AUTH = "auth_graph"
-    const val LOGIN = "login"
-    const val SIGN_UP = "sign_up"
-    const val FORGOT_PASSWORD = "forgot_password"
-    const val DASHBOARD = "dashboard_graph"
-}
-
+/*
+ * This composable sets up the navigation graph for the entire application.
+ * It uses a NavHost to define all possible destinations and manages the
+ * navigation state.
+ */
 @Composable
-fun AppNavigation(
-    authViewModel: AuthViewModel = viewModel()
-) {
-    val navController = rememberNavController()
-    val authState by authViewModel.state.collectAsState()
+fun AppNavigation() {
+    val navController = androidx.navigation.compose.rememberNavController()
 
-    NavHost(navController = navController, startDestination = Route.SPLASH) {
-        composable(Route.SPLASH) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
+        composable(Screen.Splash.route) {
             SplashScreen(onSplashFinished = {
-                navController.navigate(Route.AUTH) {
-                    popUpTo(Route.SPLASH) { inclusive = true }
+                // After splash, navigate to login and clear the back stack
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Splash.route) { inclusive = true }
                 }
             })
         }
-
-        navigation(startDestination = Route.LOGIN, route = Route.AUTH) {
-            composable(Route.LOGIN) {
-                LoginScreen(
-                    state = authState,
-                    onEvent = authViewModel::onEvent,
-                    onNavigateToSignUp = { navController.navigate(Route.SIGN_UP) },
-                    onNavigateToForgotPassword = { navController.navigate(Route.FORGOT_PASSWORD) },
-                    onLoginSuccess = {
-                        navController.navigate(Route.DASHBOARD) {
-                            popUpTo(Route.AUTH) { inclusive = true }
-                        }
+        composable(Screen.Login.route) {
+            // PRODUCTION: Use hiltViewModel() to get the ViewModel instance
+            val authViewModel: AuthViewModel = hiltViewModel()
+            LoginScreen(
+                authViewModel = authViewModel,
+                onNavigateToSignUp = { navController.navigate(Screen.SignUp.route) },
+                onNavigateToForgotPassword = { navController.navigate(Screen.ForgotPassword.route) },
+                onLoginSuccess = {
+                    navController.navigate(Screen.Dashboard.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
                     }
-                )
-            }
-            composable(Route.SIGN_UP) {
-                SignUpScreen(
-                    state = authState,
-                    onEvent = authViewModel::onEvent,
-                    onNavigateToLogin = { navController.popBackStack() }
-                )
-            }
-            composable(Route.FORGOT_PASSWORD) {
-                ForgotPasswordScreen(
-                    state = authState,
-                    onEvent = authViewModel::onEvent,
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
+                }
+            )
         }
-
-        navigation(startDestination = "dashboard_main", route = Route.DASHBOARD) {
-            composable("dashboard_main") {
-                DashboardScreen()
-            }
+        composable(Screen.SignUp.route) {
+            val authViewModel: AuthViewModel = hiltViewModel()
+            SignUpScreen(
+                authViewModel = authViewModel,
+                onNavigateToLogin = { navController.popBackStack() },
+                onSignUpSuccess = {
+                    navController.navigate(Screen.Dashboard.route) {
+                        popUpTo(Screen.SignUp.route) { inclusive = true }
+                    }
+                }
+            )
         }
+        composable(Screen.ForgotPassword.route) {
+            val authViewModel: AuthViewModel = hiltViewModel()
+            ForgotPasswordScreen(
+                authViewModel = authViewModel,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(Screen.Dashboard.route) {
+            DashboardScreen(navController = navController)
+        }
+        // Add other destinations (TaskBoard, Chat, etc.) here
     }
 }

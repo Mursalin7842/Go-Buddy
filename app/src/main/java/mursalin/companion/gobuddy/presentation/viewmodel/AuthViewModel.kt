@@ -2,11 +2,14 @@ package mursalin.companion.gobuddy.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mursalin.companion.gobuddy.domain.repository.AuthRepository
+import javax.inject.Inject
+import mursalin.companion.gobuddy.domain.model.User as DomainUser
 
 // Represents all possible user actions on the authentication screens.
 sealed class AuthEvent {
@@ -19,6 +22,7 @@ sealed class AuthEvent {
     object Login : AuthEvent()
     object SignUp : AuthEvent()
     object ResetPassword : AuthEvent()
+    object ClearError : AuthEvent()
 }
 
 // Holds the entire state for the authentication UI.
@@ -31,10 +35,14 @@ data class AuthState(
     val isConfirmPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val isAuthSuccessful: Boolean = false
+    val user: DomainUser? = null
 )
 
-class AuthViewModel : ViewModel() {
+// PRODUCTION: Annotate with @HiltViewModel and inject dependencies.
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
     val state = _state.asStateFlow()
@@ -50,34 +58,54 @@ class AuthViewModel : ViewModel() {
             is AuthEvent.Login -> loginUser()
             is AuthEvent.SignUp -> signUpUser()
             is AuthEvent.ResetPassword -> resetPassword()
+            is AuthEvent.ClearError -> _state.update { it.copy(error = null) }
         }
     }
 
     private fun loginUser() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            // In a real app, you would call your LoginUseCase here.
-            // For now, we'll simulate a successful login.
-            delay(2000) // Simulate network call
-            _state.update { it.copy(isLoading = false, isAuthSuccessful = true) }
+            val result = authRepository.login(
+                email = _state.value.email,
+                password = _state.value.password
+            )
+            result.onSuccess { user ->
+                _state.update { it.copy(isLoading = false, user = user) }
+            }.onFailure { exception ->
+                _state.update { it.copy(isLoading = false, error = exception.message ?: "An unknown error occurred") }
+            }
         }
     }
 
     private fun signUpUser() {
         viewModelScope.launch {
+            if (_state.value.password != _state.value.confirmPassword) {
+                _state.update { it.copy(error = "Passwords do not match.") }
+                return@launch
+            }
             _state.update { it.copy(isLoading = true, error = null) }
-            // In a real app, you would call your SignupUseCase here.
-            delay(2000)
-            _state.update { it.copy(isLoading = false) }
+            val result = authRepository.signUp(
+                name = _state.value.fullName,
+                email = _state.value.email,
+                password = _state.value.password
+            )
+            result.onSuccess { user ->
+                _state.update { it.copy(isLoading = false, user = user) }
+            }.onFailure { exception ->
+                _state.update { it.copy(isLoading = false, error = exception.message ?: "An unknown error occurred") }
+            }
         }
     }
 
     private fun resetPassword() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            // In a real app, you would call your ForgotPasswordUseCase here.
-            delay(2000)
-            _state.update { it.copy(isLoading = false) }
+            val result = authRepository.requestPasswordReset(_state.value.email)
+            result.onSuccess {
+                _state.update { it.copy(isLoading = false, error = "Password reset link sent to your email.") }
+            }.onFailure { exception ->
+                _state.update { it.copy(isLoading = false, error = exception.message ?: "An unknown error occurred") }
+            }
         }
     }
 }
