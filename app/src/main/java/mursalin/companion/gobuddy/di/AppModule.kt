@@ -21,8 +21,8 @@ object AppModule {
     @Singleton
     fun provideAppwriteClient(@ApplicationContext context: Context): Client {
         return Client(context)
-            .setEndpoint("https://cloud.appwrite.io/v1")
-            .setProject("YOUR_PROJECT_ID") // IMPORTANT: Replace with your Project ID
+            .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+            .setProject("68909080002fa8013fde") // Your Project ID
             .setSelfSigned(true)
     }
 
@@ -62,6 +62,7 @@ object AppModule {
         return AchievementRepositoryImpl(databases)
     }
 
+    // FIX: Added the missing provider for the SettingsRepository.
     @Provides
     @Singleton
     fun provideSettingsRepository(): SettingsRepository {

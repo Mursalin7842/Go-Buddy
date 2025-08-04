@@ -9,11 +9,15 @@ import mursalin.companion.gobuddy.domain.model.Theme
 import mursalin.companion.gobuddy.domain.repository.SettingsRepository
 import javax.inject.Inject
 
+/**
+ * A ViewModel for the MainActivity to observe app-wide settings like theme.
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     settingsRepository: SettingsRepository
 ) : ViewModel() {
 
+    // Expose the theme as a StateFlow so the MainActivity can observe it.
     val theme = settingsRepository.theme.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
