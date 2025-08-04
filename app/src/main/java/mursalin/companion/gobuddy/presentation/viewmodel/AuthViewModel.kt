@@ -7,10 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import mursalin.companion.gobuddy.domain.repository.AuthRepository
+import mursalin.companion.gobuddy.domain.use_case.auth.ForgetPasswordUseCase
+import mursalin.companion.gobuddy.domain.use_case.auth.LoginUseCase
+import mursalin.companion.gobuddy.domain.use_case.auth.SignUpUseCase
 import javax.inject.Inject
 import mursalin.companion.gobuddy.domain.model.User as DomainUser
 
+// (AuthEvent and AuthState data class remain the same)
 sealed class AuthEvent {
     data class FullNameChanged(val value: String) : AuthEvent()
     data class EmailChanged(val value: String) : AuthEvent()
@@ -36,9 +39,13 @@ data class AuthState(
     val user: DomainUser? = null
 )
 
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    // FIX: Inject the specific use cases instead of the entire repository.
+    private val loginUseCase: LoginUseCase,
+    private val signUpUseCase: SignUpUseCase,
+    private val forgetPasswordUseCase: ForgetPasswordUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
@@ -62,14 +69,15 @@ class AuthViewModel @Inject constructor(
     private fun loginUser() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            val result = authRepository.login(
+            // FIX: Call the LoginUseCase
+            val result = loginUseCase(
                 email = _state.value.email,
                 password = _state.value.password
             )
             result.onSuccess { user ->
                 _state.update { it.copy(isLoading = false, user = user) }
             }.onFailure { exception ->
-                _state.update { it.copy(isLoading = false, error = exception.message ?: "An unknown error occurred") }
+                _state.update { it.copy(isLoading = false, error = exception.message) }
             }
         }
     }
@@ -81,7 +89,8 @@ class AuthViewModel @Inject constructor(
                 return@launch
             }
             _state.update { it.copy(isLoading = true, error = null) }
-            val result = authRepository.signUp(
+            // FIX: Call the SignUpUseCase
+            val result = signUpUseCase(
                 name = _state.value.fullName,
                 email = _state.value.email,
                 password = _state.value.password
@@ -89,7 +98,7 @@ class AuthViewModel @Inject constructor(
             result.onSuccess { user ->
                 _state.update { it.copy(isLoading = false, user = user) }
             }.onFailure { exception ->
-                _state.update { it.copy(isLoading = false, error = exception.message ?: "An unknown error occurred") }
+                _state.update { it.copy(isLoading = false, error = exception.message) }
             }
         }
     }
@@ -97,11 +106,12 @@ class AuthViewModel @Inject constructor(
     private fun resetPassword() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            val result = authRepository.requestPasswordReset(_state.value.email)
+            // FIX: Call the ForgetPasswordUseCase
+            val result = forgetPasswordUseCase(_state.value.email)
             result.onSuccess {
                 _state.update { it.copy(isLoading = false, error = "Password reset link sent to your email.") }
             }.onFailure { exception ->
-                _state.update { it.copy(isLoading = false, error = exception.message ?: "An unknown error occurred") }
+                _state.update { it.copy(isLoading = false, error = exception.message) }
             }
         }
     }

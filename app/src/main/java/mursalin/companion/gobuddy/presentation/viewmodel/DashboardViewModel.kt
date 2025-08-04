@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mursalin.companion.gobuddy.domain.model.Project
-import mursalin.companion.gobuddy.domain.repository.ProjectRepository
+import mursalin.companion.gobuddy.domain.use_case.project.GetProjectsUseCase
 import javax.inject.Inject
 
 data class DashboardState(
@@ -19,7 +19,7 @@ data class DashboardState(
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val projectRepository: ProjectRepository
+    private val getProjectsUseCase: GetProjectsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DashboardState())
@@ -32,7 +32,7 @@ class DashboardViewModel @Inject constructor(
     private fun loadProjects() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            projectRepository.getProjects()
+            getProjectsUseCase()
                 .onSuccess { projects ->
                     _state.update { it.copy(isLoading = false, projects = projects) }
                 }

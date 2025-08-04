@@ -1,15 +1,11 @@
 package mursalin.companion.gobuddy.domain.repository
 
 import mursalin.companion.gobuddy.domain.model.Project
+import java.util.Date
 
-/**
- * Interface for the project repository. Defines the contract for all
- * project-related data operations.
- */
 interface ProjectRepository {
-    /**
-     * Fetches all projects for the current user.
-     * @return A Result containing the list of Projects on success, or an Exception on failure.
-     */
     suspend fun getProjects(): Result<List<Project>>
+    suspend fun addProject(title: String, description: String, startDate: Date, endDate: Date, status: String): Result<Unit>
+    suspend fun updateProject(project: Project): Result<Unit>
+    suspend fun deleteProject(projectId: String): Result<Unit>
 }

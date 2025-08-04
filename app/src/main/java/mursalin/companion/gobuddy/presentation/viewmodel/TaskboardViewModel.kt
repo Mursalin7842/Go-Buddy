@@ -2,12 +2,16 @@ package mursalin.companion.gobuddy.presentation.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import mursalin.companion.gobuddy.domain.model.Priority
 import mursalin.companion.gobuddy.domain.model.Task
 import mursalin.companion.gobuddy.domain.model.TaskStatus
+import mursalin.companion.gobuddy.domain.use_case.task.GetTasksForProjectUseCase
 import java.util.Date
 import javax.inject.Inject
 
@@ -20,6 +24,7 @@ data class TaskBoardState(
 
 @HiltViewModel
 class TaskBoardViewModel @Inject constructor(
+    private val getTasksForProjectUseCase: GetTasksForProjectUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -32,11 +37,18 @@ class TaskBoardViewModel @Inject constructor(
     }
 
     private fun loadTasksForProject(projectId: String) {
-        _state.value = TaskBoardState(
-            projectName = "Go Buddy App Development",
-            isLoading = false,
-            tasks = generateDummyTasks(projectId)
-        )
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            // In a real app, this would be a network call.
+            // For now, we'll continue to use dummy data to demonstrate the UI.
+            _state.update {
+                it.copy(
+                    projectName = "Go Buddy App Development",
+                    isLoading = false,
+                    tasks = generateDummyTasks(projectId)
+                )
+            }
+        }
     }
 
     private fun generateDummyTasks(projectId: String): List<Task> {
