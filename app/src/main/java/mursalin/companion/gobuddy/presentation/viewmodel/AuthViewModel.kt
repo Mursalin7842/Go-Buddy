@@ -42,7 +42,6 @@ data class AuthState(
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    // FIX: Inject the specific use cases instead of the entire repository.
     private val loginUseCase: LoginUseCase,
     private val signUpUseCase: SignUpUseCase,
     private val forgetPasswordUseCase: ForgetPasswordUseCase
@@ -69,7 +68,6 @@ class AuthViewModel @Inject constructor(
     private fun loginUser() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            // FIX: Call the LoginUseCase
             val result = loginUseCase(
                 email = _state.value.email,
                 password = _state.value.password
@@ -89,7 +87,6 @@ class AuthViewModel @Inject constructor(
                 return@launch
             }
             _state.update { it.copy(isLoading = true, error = null) }
-            // FIX: Call the SignUpUseCase
             val result = signUpUseCase(
                 name = _state.value.fullName,
                 email = _state.value.email,
@@ -106,7 +103,6 @@ class AuthViewModel @Inject constructor(
     private fun resetPassword() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            // FIX: Call the ForgetPasswordUseCase
             val result = forgetPasswordUseCase(_state.value.email)
             result.onSuccess {
                 _state.update { it.copy(isLoading = false, error = "Password reset link sent to your email.") }

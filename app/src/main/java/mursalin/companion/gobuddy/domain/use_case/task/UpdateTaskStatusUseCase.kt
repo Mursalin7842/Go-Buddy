@@ -14,3 +14,4 @@ class UpdateTaskStatusUseCase @Inject constructor(
         return repository.updateTaskStatus(taskId, status)
     }
 }
+

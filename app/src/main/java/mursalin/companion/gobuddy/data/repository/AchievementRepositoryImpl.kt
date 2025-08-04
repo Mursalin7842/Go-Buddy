@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-const val ACHIEVEMENTS_COLLECTION_ID = "achievements"
-
 class AchievementRepositoryImpl @Inject constructor(
     private val databases: Databases
 ) : AchievementRepository {

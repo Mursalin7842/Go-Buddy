@@ -7,8 +7,6 @@ import mursalin.companion.gobuddy.domain.model.Sender
 import mursalin.companion.gobuddy.domain.repository.ChatRepository
 import javax.inject.Inject
 
-const val CHATS_COLLECTION_ID = "chats"
-
 class ChatRepositoryImpl @Inject constructor(
     private val databases: Databases
 ) : ChatRepository {
