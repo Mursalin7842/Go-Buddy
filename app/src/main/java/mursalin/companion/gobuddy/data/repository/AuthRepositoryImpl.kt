@@ -49,7 +49,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
             // Create a session (log the user in)
-            account.createEmailSession(email, password)
+            account.createEmailPasswordSession(email, password)
             // Fetch the logged-in user's account details
             val appwriteUser = account.get()
             // Map the Appwrite user model to our domain model

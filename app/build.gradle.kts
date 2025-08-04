@@ -91,5 +91,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Import the OkHttp BOM
+    implementation(platform(libs.okhttp.bom)) // Or the latest version
+
+    // Now, you can declare OkHttp dependencies without specifying versions
+    // The BOM will manage their versions.
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }
 
