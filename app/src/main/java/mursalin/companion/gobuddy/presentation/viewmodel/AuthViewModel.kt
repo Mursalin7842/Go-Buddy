@@ -11,7 +11,6 @@ import mursalin.companion.gobuddy.domain.repository.AuthRepository
 import javax.inject.Inject
 import mursalin.companion.gobuddy.domain.model.User as DomainUser
 
-// Represents all possible user actions on the authentication screens.
 sealed class AuthEvent {
     data class FullNameChanged(val value: String) : AuthEvent()
     data class EmailChanged(val value: String) : AuthEvent()
@@ -25,7 +24,6 @@ sealed class AuthEvent {
     object ClearError : AuthEvent()
 }
 
-// Holds the entire state for the authentication UI.
 data class AuthState(
     val fullName: String = "",
     val email: String = "",
@@ -38,7 +36,6 @@ data class AuthState(
     val user: DomainUser? = null
 )
 
-// PRODUCTION: Annotate with @HiltViewModel and inject dependencies.
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository

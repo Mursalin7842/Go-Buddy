@@ -1,4 +1,3 @@
-// FILE: app/src/main/java/mursalin/companion/gobuddy/domain/model/Achievement.kt
 package mursalin.companion.gobuddy.domain.model
 
 import androidx.compose.ui.graphics.vector.ImageVector

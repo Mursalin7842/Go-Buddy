@@ -1,11 +1,3 @@
-// ---------------------------------------------------------------------------------
-// 📦 di (Dependency Injection)
-// ---------------------------------------------------------------------------------
-// This package contains Hilt modules that tell the DI framework how to provide
-// instances of classes to other parts of the app.
-// ---------------------------------------------------------------------------------
-
-// FILE: app/src/main/java/mursalin/companion/gobuddy/di/AppModule.kt
 package mursalin.companion.gobuddy.di
 
 import android.content.Context
@@ -17,8 +9,8 @@ import dagger.hilt.components.SingletonComponent
 import io.appwrite.Client
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
-import mursalin.companion.gobuddy.data.repository.AuthRepositoryImpl
-import mursalin.companion.gobuddy.domain.repository.AuthRepository
+import mursalin.companion.gobuddy.data.repository.*
+import mursalin.companion.gobuddy.domain.repository.*
 import javax.inject.Singleton
 
 @Module
@@ -29,8 +21,8 @@ object AppModule {
     @Singleton
     fun provideAppwriteClient(@ApplicationContext context: Context): Client {
         return Client(context)
-            .setEndpoint("https://nyc.cloud.appwrite.io/v1") // Your Appwrite Endpoint
-            .setProject("68909080002fa8013fde")              // Your Project ID
+            .setEndpoint("https://cloud.appwrite.io/v1")
+            .setProject("YOUR_PROJECT_ID") // IMPORTANT: Replace with your Project ID
             .setSelfSigned(true)
     }
 
@@ -46,11 +38,33 @@ object AppModule {
         return Databases(client)
     }
 
-    // This function tells Hilt that whenever some part of the app asks for an
-    // AuthRepository, it should provide an instance of AuthRepositoryImpl.
     @Provides
     @Singleton
     fun provideAuthRepository(account: Account): AuthRepository {
         return AuthRepositoryImpl(account)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProjectRepository(databases: Databases): ProjectRepository {
+        return ProjectRepositoryImpl(databases)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatRepository(databases: Databases): ChatRepository {
+        return ChatRepositoryImpl(databases)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAchievementRepository(databases: Databases): AchievementRepository {
+        return AchievementRepositoryImpl(databases)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(): SettingsRepository {
+        return SettingsRepositoryImpl()
     }
 }

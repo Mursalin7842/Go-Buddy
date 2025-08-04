@@ -51,15 +51,11 @@ fun TaskBoardScreen(
             }
         }
     ) { padding ->
-        // The main content of the screen is a horizontally scrolling row of columns
         LazyRow(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+            modifier = Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Create a column for each task status
             items(TaskStatus.values()) { status ->
                 TaskColumn(
                     status = status,
@@ -70,9 +66,6 @@ fun TaskBoardScreen(
     }
 }
 
-/**
- * A composable that represents a single column in the Kanban board (e.g., "To Do").
- */
 @Composable
 fun TaskColumn(status: TaskStatus, tasks: List<Task>) {
     Column(
@@ -85,14 +78,12 @@ fun TaskColumn(status: TaskStatus, tasks: List<Task>) {
             )
             .padding(8.dp)
     ) {
-        // Column Header
         Text(
             text = status.name,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)
         )
-        // List of tasks in the column
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(tasks) { task ->
                 TaskCard(task = task)
@@ -101,9 +92,6 @@ fun TaskColumn(status: TaskStatus, tasks: List<Task>) {
     }
 }
 
-/**
- * A reusable composable to display a single task card.
- */
 @Composable
 fun TaskCard(task: Task) {
     Card(
@@ -117,15 +105,11 @@ fun TaskCard(task: Task) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            // Display a priority tag
             PriorityTag(priority = task.priority)
         }
     }
 }
 
-/**
- * A small, styled tag to indicate task priority.
- */
 @Composable
 fun PriorityTag(priority: Priority) {
     val (text, color) = when (priority) {
@@ -146,8 +130,6 @@ fun PriorityTag(priority: Priority) {
 @Composable
 fun TaskBoardScreenPreview() {
     GoBuddyTheme {
-        // For the preview, we can't use hiltViewModel(), so we'll just show the UI structure.
-        // A full preview would require creating a dummy ViewModel.
         Text("Task Board Preview")
     }
 }

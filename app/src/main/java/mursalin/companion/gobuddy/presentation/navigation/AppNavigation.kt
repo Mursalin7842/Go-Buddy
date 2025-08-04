@@ -5,10 +5,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import mursalin.companion.gobuddy.presentation.screens.s09achievements.AchievementsScreen
 import mursalin.companion.gobuddy.presentation.screens.s02auth.ForgotPasswordScreen
 import mursalin.companion.gobuddy.presentation.screens.s02auth.LoginScreen
 import mursalin.companion.gobuddy.presentation.screens.s02auth.SignUpScreen
+import mursalin.companion.gobuddy.presentation.screens.s07chat.ChatScreen
 import mursalin.companion.gobuddy.presentation.screens.s03dashboard.DashboardScreen
+import mursalin.companion.gobuddy.presentation.screens.s04project_list.ProjectListScreen
+import mursalin.companion.gobuddy.presentation.screens.s10settings.SettingsScreen
 import mursalin.companion.gobuddy.presentation.screens.s01splash.SplashScreen
 import mursalin.companion.gobuddy.presentation.screens.s05task_board.TaskBoardScreen
 
@@ -56,8 +60,20 @@ fun AppNavigation() {
         composable(Screen.Dashboard.route) {
             DashboardScreen(navController = navController)
         }
+        composable(Screen.ProjectList.route) {
+            ProjectListScreen(navController = navController)
+        }
         composable(Screen.TaskBoard.route) {
             TaskBoardScreen(navController = navController)
+        }
+        composable(Screen.Chat.route) {
+            ChatScreen(navController = navController)
+        }
+        composable(Screen.Achievements.route) {
+            AchievementsScreen(navController = navController)
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController = navController)
         }
     }
 }
