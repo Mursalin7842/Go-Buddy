@@ -1,32 +1,95 @@
 package mursalin.companion.gobuddy.data.repository
 
+import io.appwrite.ID
 import io.appwrite.services.Databases
-import mursalin.companion.gobuddy.domain.model.Task
-import mursalin.companion.gobuddy.domain.model.TaskStatus
-import mursalin.companion.gobuddy.domain.repository.TaskRepository
+import io.appwrite.Query
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.DB_ID
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.TASKS_COLLECTION_ID
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
+import mursalin.companion.gobuddy.domain.model.Task
+import mursalin.companion.gobuddy.domain.repository.TaskRepository
 
 class TaskRepositoryImpl @Inject constructor(
     private val databases: Databases
 ) : TaskRepository {
+
+    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+
     override suspend fun getTasksForProject(projectId: String): Result<List<Task>> {
-        // This would contain the Appwrite logic to fetch tasks for a specific project.
-        // For now, it returns an empty list.
-        return Result.success(emptyList())
+        return try {
+            val response = databases.listDocuments(
+                databaseId = DB_ID,
+                collectionId = TASKS_COLLECTION_ID,
+                queries = listOf(Query.equal("projectId", projectId))
+            )
+            val tasks = response.documents.map { document ->
+                Task(
+                    id = document.id,
+                    projectId = document.data["projectId"] as String,
+                    title = document.data["title"] as String,
+                    description = document.data["description"] as String,
+                    dueDate = isoFormat.parse(document.data["dueDate"] as String) ?: Date(),
+                    priority = document.data["priority"] as String,
+                    status = document.data["status"] as String,
+                    isBlocked = document.data["isBlocked"] as Boolean,
+                    createdAt = isoFormat.parse(document.data["createdAt"] as String) ?: Date()
+                )
+            }
+            Result.success(tasks)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun addTask(task: Task): Result<Unit> {
-        // Appwrite logic to add a task would go here.
-        return Result.success(Unit)
+        return try {
+            databases.createDocument(
+                databaseId = DB_ID,
+                collectionId = TASKS_COLLECTION_ID,
+                documentId = ID.unique(),
+                data = mapOf(
+                    "projectId" to task.projectId,
+                    "title" to task.title,
+                    "description" to task.description,
+                    "dueDate" to isoFormat.format(task.dueDate),
+                    "priority" to task.priority,
+                    "status" to task.status,
+                    "isBlocked" to task.isBlocked,
+                    "createdAt" to isoFormat.format(task.createdAt)
+                )
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    override suspend fun updateTaskStatus(taskId: String, status: TaskStatus): Result<Unit> {
-        // Appwrite logic to update a task's status would go here.
-        return Result.success(Unit)
+    override suspend fun updateTaskStatus(taskId: String, newStatus: String): Result<Unit> {
+        return try {
+            databases.updateDocument(
+                databaseId = DB_ID,
+                collectionId = TASKS_COLLECTION_ID,
+                documentId = taskId,
+                data = mapOf("status" to newStatus)
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun deleteTask(taskId: String): Result<Unit> {
-        // Appwrite logic to delete a task would go here.
-        return Result.success(Unit)
+        return try {
+            databases.deleteDocument(
+                databaseId = DB_ID,
+                collectionId = TASKS_COLLECTION_ID,
+                documentId = taskId
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

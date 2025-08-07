@@ -1,7 +1,14 @@
-// FILE: app/src/main/java/mursalin/companion/gobuddy/domain/model/Task.kt
 package mursalin.companion.gobuddy.domain.model
 
 import java.util.Date
+
+enum class Priority {
+    LOW, MEDIUM, HIGH
+}
+
+enum class TaskStatus {
+    TODO, DOING, DONE, STUCK
+}
 
 data class Task(
     val id: String,
@@ -11,14 +18,6 @@ data class Task(
     val dueDate: Date,
     val priority: Priority,
     val status: TaskStatus,
-    val isBlocked: Boolean = false,
-    val createdAt: Date = Date()
+    val isBlocked: Boolean,
+    val createdAt: Date
 )
-
-enum class TaskStatus {
-    TODO, DOING, DONE, STUCK
-}
-
-enum class Priority {
-    LOW, MEDIUM, HIGH
-}

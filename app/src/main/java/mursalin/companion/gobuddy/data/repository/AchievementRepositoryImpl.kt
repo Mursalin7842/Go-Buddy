@@ -1,11 +1,14 @@
 package mursalin.companion.gobuddy.data.repository
 
 import io.appwrite.services.Databases
-import mursalin.companion.gobuddy.domain.model.Achievement
-import mursalin.companion.gobuddy.domain.repository.AchievementRepository
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.ACHIEVEMENTS_COLLECTION_ID
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.DB_ID
+import mursalin.companion.gobuddy.domain.model.Achievement
+import mursalin.companion.gobuddy.domain.repository.AchievementRepository
+
 
 class AchievementRepositoryImpl @Inject constructor(
     private val databases: Databases
@@ -25,7 +28,7 @@ class AchievementRepositoryImpl @Inject constructor(
                     title = document.data["title"] as String,
                     description = document.data["description"] as String,
                     iconName = document.data["iconName"] as String,
-                    dateEarned = (document.data["dateEarned"] as? String)?.let { isoFormat.parse(it) }
+                    dateEarned = isoFormat.parse(document.data["dateEarned"] as String) ?: Date()
                 )
             }
             Result.success(achievements)
