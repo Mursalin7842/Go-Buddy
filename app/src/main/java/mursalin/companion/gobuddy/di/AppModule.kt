@@ -23,7 +23,7 @@ object AppModule {
         return Client(context)
             .setEndpoint("https://nyc.cloud.appwrite.io/v1")
             .setProject("68909080002fa8013fde") // IMPORTANT: Replace with your Project ID
-            .setSelfSigned(true)
+           // .setSelfSigned(true)
     }
 
     @Provides
