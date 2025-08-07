@@ -1,8 +1,8 @@
 package mursalin.companion.gobuddy.domain.use_case.auth
 
+import javax.inject.Inject
 import mursalin.companion.gobuddy.domain.model.User
 import mursalin.companion.gobuddy.domain.repository.AuthRepository
-import javax.inject.Inject
 
 class CheckSessionUseCase @Inject constructor(
     private val repository: AuthRepository

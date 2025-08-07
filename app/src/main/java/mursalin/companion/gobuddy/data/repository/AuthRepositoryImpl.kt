@@ -2,9 +2,9 @@ package mursalin.companion.gobuddy.data.repository
 
 import io.appwrite.ID
 import io.appwrite.services.Account
+import javax.inject.Inject
 import mursalin.companion.gobuddy.domain.model.User
 import mursalin.companion.gobuddy.domain.repository.AuthRepository
-import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val account: Account
@@ -18,6 +18,7 @@ class AuthRepositoryImpl @Inject constructor(
                 password = password,
                 name = name
             )
+            // After signup, log the user in to create a session
             login(email, password)
         } catch (e: Exception) {
             Result.failure(e)
@@ -27,13 +28,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
             account.createEmailPasswordSession(email, password)
-            val appwriteUser = account.get()
-            val domainUser = User(
-                id = appwriteUser.id,
-                name = appwriteUser.name,
-                email = appwriteUser.email
-            )
-            Result.success(domainUser)
+            getCurrentUser()
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -41,7 +36,8 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun requestPasswordReset(email: String): Result<Unit> {
         return try {
-            val recoveryUrl = "https://your-app.com/reset-password"
+            // NOTE: Replace with your actual deep link URL for production
+            val recoveryUrl = "http://localhost/reset-password"
             account.createRecovery(email, recoveryUrl)
             Result.success(Unit)
         } catch (e: Exception) {

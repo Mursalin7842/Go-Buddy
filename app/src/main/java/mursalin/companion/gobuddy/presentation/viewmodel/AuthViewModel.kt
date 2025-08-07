@@ -3,18 +3,18 @@ package mursalin.companion.gobuddy.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mursalin.companion.gobuddy.domain.model.User
 import mursalin.companion.gobuddy.domain.use_case.auth.CheckSessionUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.ForgetPasswordUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.LoginUseCase
+import mursalin.companion.gobuddy.domain.use_case.auth.LogoutUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.SignUpUseCase
-import javax.inject.Inject
-import mursalin.companion.gobuddy.domain.model.User as DomainUser
 
-// (AuthEvent and AuthState data class remain the same)
 sealed class AuthEvent {
     data class FullNameChanged(val value: String) : AuthEvent()
     data class EmailChanged(val value: String) : AuthEvent()
@@ -25,9 +25,9 @@ sealed class AuthEvent {
     object Login : AuthEvent()
     object SignUp : AuthEvent()
     object ResetPassword : AuthEvent()
-    object ClearError : AuthEvent()
-
+    object Logout : AuthEvent()
     object CheckSession : AuthEvent()
+    object ClearError : AuthEvent()
 }
 
 data class AuthState(
@@ -39,16 +39,16 @@ data class AuthState(
     val isConfirmPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val user: DomainUser? = null
+    val user: User? = null
 )
-
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val checkSessionUseCase: CheckSessionUseCase,
     private val loginUseCase: LoginUseCase,
     private val signUpUseCase: SignUpUseCase,
-    private val forgetPasswordUseCase: ForgetPasswordUseCase
+    private val forgetPasswordUseCase: ForgetPasswordUseCase,
+    private val checkSessionUseCase: CheckSessionUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
@@ -65,8 +65,9 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.Login -> loginUser()
             is AuthEvent.SignUp -> signUpUser()
             is AuthEvent.ResetPassword -> resetPassword()
-            is AuthEvent.ClearError -> _state.update { it.copy(error = null) }
+            is AuthEvent.Logout -> logoutUser()
             is AuthEvent.CheckSession -> checkUserSession()
+            is AuthEvent.ClearError -> _state.update { it.copy(error = null) }
         }
     }
 
@@ -116,6 +117,14 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    private fun logoutUser() {
+        viewModelScope.launch {
+            logoutUseCase()
+            _state.update { AuthState() } // Reset state to initial
+        }
+    }
+
     private fun checkUserSession() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
