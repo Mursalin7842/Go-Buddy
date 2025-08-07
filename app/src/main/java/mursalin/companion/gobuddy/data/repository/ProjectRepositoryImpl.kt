@@ -1,11 +1,12 @@
 package mursalin.companion.gobuddy.data.repository
 
+import io.appwrite.ID
 import io.appwrite.services.Databases
-import mursalin.companion.gobuddy.domain.model.Project
-import mursalin.companion.gobuddy.domain.repository.ProjectRepository
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import mursalin.companion.gobuddy.domain.model.Project
+import mursalin.companion.gobuddy.domain.repository.ProjectRepository
 
 class ProjectRepositoryImpl @Inject constructor(
     private val databases: Databases
@@ -36,9 +37,25 @@ class ProjectRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addProject(title: String, description: String, startDate: Date, endDate: Date, status: String): Result<Unit> {
-        // Appwrite logic to add a project would go here.
-        return Result.success(Unit)
+    override suspend fun addProject(project: Project): Result<Unit> {
+        return try {
+            databases.createDocument(
+                databaseId = DB_ID,
+                collectionId = PROJECTS_COLLECTION_ID,
+                documentId = ID.unique(),
+                data = mapOf(
+                    "userId" to project.userId,
+                    "title" to project.title,
+                    "description" to project.description,
+                    "startDate" to isoFormat.format(project.startDate),
+                    "endDate" to isoFormat.format(project.endDate),
+                    "status" to project.status
+                )
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun updateProject(project: Project): Result<Unit> {
