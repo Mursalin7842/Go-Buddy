@@ -66,7 +66,7 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.SignUp -> signUpUser()
             is AuthEvent.ResetPassword -> resetPassword()
             is AuthEvent.ClearError -> _state.update { it.copy(error = null) }
-            is AuthEvent.CheckSession -> TODO()
+            is AuthEvent.CheckSession -> checkUserSession()
         }
     }
 
