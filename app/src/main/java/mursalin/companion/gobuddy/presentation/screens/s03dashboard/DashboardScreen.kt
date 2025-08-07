@@ -9,10 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import mursalin.companion.gobuddy.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,6 +29,7 @@ fun DashboardScreen(navController: NavController) {
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
+                // This navigation call is now correct.
                 navController.navigate(Screen.AddProject.route)
             }) {
                 Icon(Icons.Default.Add, "Add Project")
@@ -91,9 +90,4 @@ fun DashboardScreen(navController: NavController) {
             }
         }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun DashboardScreenPreview() {
-    DashboardScreen(navController = rememberNavController())
 }

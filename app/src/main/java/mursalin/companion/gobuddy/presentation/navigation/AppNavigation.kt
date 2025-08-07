@@ -5,9 +5,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import mursalin.companion.gobuddy.presentation.screens.s09achievements.AchievementsScreen
 import mursalin.companion.gobuddy.presentation.screens.s02auth.ForgotPasswordScreen
 import mursalin.companion.gobuddy.presentation.screens.s02auth.LoginScreen
@@ -15,6 +17,8 @@ import mursalin.companion.gobuddy.presentation.screens.s02auth.SignUpScreen
 import mursalin.companion.gobuddy.presentation.screens.s07chat.ChatScreen
 import mursalin.companion.gobuddy.presentation.screens.s03dashboard.DashboardScreen
 import mursalin.companion.gobuddy.presentation.screens.s04project_list.ProjectListScreen
+import mursalin.companion.gobuddy.presentation.screens.s11_add_project.AddProjectScreen
+import mursalin.companion.gobuddy.presentation.screens.s12_add_task.AddTaskScreen
 import mursalin.companion.gobuddy.presentation.screens.s10settings.SettingsScreen
 import mursalin.companion.gobuddy.presentation.screens.s01splash.SplashScreen
 import mursalin.companion.gobuddy.presentation.screens.s05task_board.TaskBoardScreen
@@ -31,7 +35,6 @@ fun AppNavigation() {
         composable(Screen.Splash.route) {
             SplashScreen(
                 onSplashFinished = {
-                    // After splash, check session and navigate accordingly
                     if (authState.user != null) {
                         navController.navigate(Screen.Dashboard.route) {
                             popUpTo(Screen.Splash.route) { inclusive = true }
@@ -76,10 +79,23 @@ fun AppNavigation() {
         composable(Screen.Dashboard.route) {
             DashboardScreen(navController = navController)
         }
+        // This composable was missing, which caused the crash.
+        composable(Screen.AddProject.route) {
+            AddProjectScreen(navController = navController)
+        }
+        composable(
+            route = Screen.AddTask.route,
+            arguments = listOf(navArgument("projectId") { type = NavType.StringType })
+        ) {
+            AddTaskScreen(navController = navController)
+        }
         composable(Screen.ProjectList.route) {
             ProjectListScreen(navController = navController)
         }
-        composable(Screen.TaskBoard.route) {
+        composable(
+            route = Screen.TaskBoard.route,
+            arguments = listOf(navArgument("projectId") { type = NavType.StringType })
+        ) {
             TaskBoardScreen(navController = navController)
         }
         composable(Screen.Chat.route) {
@@ -101,7 +117,6 @@ fun AppNavigation() {
         }
     }
 
-    // Perform session check when AppNavigation is first composed
     LaunchedEffect(key1 = Unit) {
         authViewModel.onEvent(AuthEvent.CheckSession)
     }

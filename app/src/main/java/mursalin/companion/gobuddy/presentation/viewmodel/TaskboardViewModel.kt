@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mursalin.companion.gobuddy.domain.model.Task
+import mursalin.companion.gobuddy.domain.model.TaskStatus
 import mursalin.companion.gobuddy.domain.use_case.task.GetTasksForProjectUseCase
 import javax.inject.Inject
 
@@ -46,10 +47,11 @@ class TaskboardViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            todoTasks = tasks.filter { t -> t.status.equals("TODO", ignoreCase = true) },
-                            doingTasks = tasks.filter { t -> t.status.equals("DOING", ignoreCase = true) },
-                            doneTasks = tasks.filter { t -> t.status.equals("DONE", ignoreCase = true) },
-                            stuckTasks = tasks.filter { t -> t.status.equals("STUCK", ignoreCase = true) }
+                            // Correctly filters using the TaskStatus enum
+                            todoTasks = tasks.filter { t -> t.status == TaskStatus.TODO },
+                            doingTasks = tasks.filter { t -> t.status == TaskStatus.DOING },
+                            doneTasks = tasks.filter { t -> t.status == TaskStatus.DONE },
+                            stuckTasks = tasks.filter { t -> t.status == TaskStatus.STUCK }
                         )
                     }
                 }

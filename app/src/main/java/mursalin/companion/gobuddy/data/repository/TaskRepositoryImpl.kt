@@ -3,12 +3,14 @@ package mursalin.companion.gobuddy.data.repository
 import io.appwrite.ID
 import io.appwrite.services.Databases
 import io.appwrite.Query
-import mursalin.companion.gobuddy.data.repository.AppwriteConstants.DB_ID
-import mursalin.companion.gobuddy.data.repository.AppwriteConstants.TASKS_COLLECTION_ID
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.DB_ID
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.TASKS_COLLECTION_ID
+import mursalin.companion.gobuddy.domain.model.Priority
 import mursalin.companion.gobuddy.domain.model.Task
+import mursalin.companion.gobuddy.domain.model.TaskStatus
 import mursalin.companion.gobuddy.domain.repository.TaskRepository
 
 class TaskRepositoryImpl @Inject constructor(
@@ -31,8 +33,10 @@ class TaskRepositoryImpl @Inject constructor(
                     title = document.data["title"] as String,
                     description = document.data["description"] as String,
                     dueDate = isoFormat.parse(document.data["dueDate"] as String) ?: Date(),
-                    priority = document.data["priority"] as String,
-                    status = document.data["status"] as String,
+                    // Converts the String from the database to the correct Priority enum
+                    priority = Priority.valueOf(document.data["priority"] as String),
+                    // Converts the String from the database to the correct TaskStatus enum
+                    status = TaskStatus.valueOf(document.data["status"] as String),
                     isBlocked = document.data["isBlocked"] as Boolean,
                     createdAt = isoFormat.parse(document.data["createdAt"] as String) ?: Date()
                 )
@@ -54,8 +58,9 @@ class TaskRepositoryImpl @Inject constructor(
                     "title" to task.title,
                     "description" to task.description,
                     "dueDate" to isoFormat.format(task.dueDate),
-                    "priority" to task.priority,
-                    "status" to task.status,
+                    // Converts the enum to a String for saving to the database
+                    "priority" to task.priority.name,
+                    "status" to task.status.name,
                     "isBlocked" to task.isBlocked,
                     "createdAt" to isoFormat.format(task.createdAt)
                 )
@@ -66,13 +71,14 @@ class TaskRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateTaskStatus(taskId: String, newStatus: String): Result<Unit> {
+    // Correctly implements the interface with the TaskStatus enum
+    override suspend fun updateTaskStatus(taskId: String, status: TaskStatus): Result<Unit> {
         return try {
             databases.updateDocument(
                 databaseId = DB_ID,
                 collectionId = TASKS_COLLECTION_ID,
                 documentId = taskId,
-                data = mapOf("status" to newStatus)
+                data = mapOf("status" to status.name) // We use .name to save the enum as a string
             )
             Result.success(Unit)
         } catch (e: Exception) {

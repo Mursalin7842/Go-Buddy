@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mursalin.companion.gobuddy.domain.model.Priority
 import mursalin.companion.gobuddy.domain.model.Task
+import mursalin.companion.gobuddy.domain.model.TaskStatus
 import mursalin.companion.gobuddy.domain.use_case.task.AddTaskUseCase
 import java.util.*
 import javax.inject.Inject
@@ -17,7 +19,7 @@ data class AddTaskState(
     val title: String = "",
     val description: String = "",
     val dueDate: Date = Date(),
-    val priority: String = "Medium",
+    val priority: Priority = Priority.MEDIUM,
     val isLoading: Boolean = false,
     val error: String? = null,
     val titleError: String? = null,
@@ -47,7 +49,7 @@ class AddTaskViewModel @Inject constructor(
         _state.update { it.copy(dueDate = date) }
     }
 
-    fun onPriorityChanged(priority: String) {
+    fun onPriorityChanged(priority: Priority) {
         _state.update { it.copy(priority = priority) }
     }
 
@@ -71,7 +73,7 @@ class AddTaskViewModel @Inject constructor(
                 description = _state.value.description,
                 dueDate = _state.value.dueDate,
                 priority = _state.value.priority,
-                status = "TODO",
+                status = TaskStatus.TODO,
                 isBlocked = false,
                 createdAt = Date()
             )

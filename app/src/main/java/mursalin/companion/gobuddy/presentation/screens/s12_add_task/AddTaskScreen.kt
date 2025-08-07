@@ -12,6 +12,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import java.text.SimpleDateFormat
 import java.util.*
+import mursalin.companion.gobuddy.domain.model.Priority
+import mursalin.companion.gobuddy.presentation.viewmodel.AddTaskViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -138,16 +140,16 @@ private fun DateSelector(label: String, date: Date, onDateSelected: (Date) -> Un
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PrioritySelector(priority: String, onPrioritySelected: (String) -> Unit) {
+private fun PrioritySelector(priority: Priority, onPrioritySelected: (Priority) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    val priorities = listOf("Low", "Medium", "High")
+    val priorities = Priority.values()
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = priority,
+            value = priority.name,
             onValueChange = {},
             readOnly = true,
             label = { Text("Priority") },
@@ -160,7 +162,7 @@ private fun PrioritySelector(priority: String, onPrioritySelected: (String) -> U
         ) {
             priorities.forEach { selectionOption ->
                 DropdownMenuItem(
-                    text = { Text(selectionOption) },
+                    text = { Text(selectionOption.name) },
                     onClick = {
                         onPrioritySelected(selectionOption)
                         expanded = false
