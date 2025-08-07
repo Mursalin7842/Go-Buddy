@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mursalin.companion.gobuddy.domain.use_case.auth.CheckSessionUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.ForgetPasswordUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.LoginUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.SignUpUseCase
@@ -25,6 +26,8 @@ sealed class AuthEvent {
     object SignUp : AuthEvent()
     object ResetPassword : AuthEvent()
     object ClearError : AuthEvent()
+
+    object CheckSession : AuthEvent()
 }
 
 data class AuthState(
@@ -42,6 +45,7 @@ data class AuthState(
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
+    private val checkSessionUseCase: CheckSessionUseCase,
     private val loginUseCase: LoginUseCase,
     private val signUpUseCase: SignUpUseCase,
     private val forgetPasswordUseCase: ForgetPasswordUseCase
@@ -62,6 +66,7 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.SignUp -> signUpUser()
             is AuthEvent.ResetPassword -> resetPassword()
             is AuthEvent.ClearError -> _state.update { it.copy(error = null) }
+            is AuthEvent.CheckSession -> TODO()
         }
     }
 
@@ -109,6 +114,18 @@ class AuthViewModel @Inject constructor(
             }.onFailure { exception ->
                 _state.update { it.copy(isLoading = false, error = exception.message) }
             }
+        }
+    }
+    private fun checkUserSession() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            checkSessionUseCase()
+                .onSuccess { user ->
+                    _state.update { it.copy(isLoading = false, user = user) }
+                }
+                .onFailure {
+                    _state.update { it.copy(isLoading = false, user = null) }
+                }
         }
     }
 }

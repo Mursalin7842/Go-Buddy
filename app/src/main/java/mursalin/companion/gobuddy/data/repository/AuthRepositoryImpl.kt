@@ -57,4 +57,18 @@ class AuthRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getCurrentUser(): Result<User> {
+        return try {
+            val appwriteUser = account.get()
+            val domainUser = User(
+                id = appwriteUser.id,
+                name = appwriteUser.name,
+                email = appwriteUser.email
+            )
+            Result.success(domainUser)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

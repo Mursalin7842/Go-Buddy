@@ -97,7 +97,7 @@ dependencies {
 
     // Now, you can declare OkHttp dependencies without specifying versions
     // The BOM will manage their versions.
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
+    //implementation(libs.okhttp)
+    //implementation(libs.logging.interceptor)
 }
 
