@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 data class ProjectListState(
     val projects: List<Project> = emptyList(),
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val error: String? = null
 )
 
@@ -25,13 +25,10 @@ class ProjectListViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProjectListState())
     val state = _state.asStateFlow()
 
-    init {
-        loadProjects()
-    }
-
-    private fun loadProjects() {
+    // The 'private' keyword has been removed from the function below
+    fun loadProjects() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(isLoading = true, error = null) }
             getProjectsUseCase()
                 .onSuccess { projects ->
                     _state.update { it.copy(isLoading = false, projects = projects) }
