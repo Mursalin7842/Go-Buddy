@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import mursalin.companion.gobuddy.domain.use_case.ai.AiProjectPlan
+import mursalin.companion.gobuddy.domain.use_case.ai.GenerateProjectPlanUseCase
 import mursalin.companion.gobuddy.domain.use_case.auth.CheckSessionUseCase
 import mursalin.companion.gobuddy.domain.use_case.project.AddProjectUseCase
 import java.util.*
@@ -21,13 +23,19 @@ data class AddProjectState(
     val error: String? = null,
     val titleError: String? = null,
     val isProjectAdded: Boolean = false,
-    val userId: String? = null
+    val userId: String? = null,
+    // AI related state
+    val aiIdea: String = "",
+    val isGenerating: Boolean = false,
+    val generatedPlan: AiProjectPlan? = null,
+    val generationError: String? = null
 )
 
 @HiltViewModel
 class AddProjectViewModel @Inject constructor(
     private val addProjectUseCase: AddProjectUseCase,
-    private val checkSessionUseCase: CheckSessionUseCase
+    private val checkSessionUseCase: CheckSessionUseCase,
+    private val generateProjectPlanUseCase: GenerateProjectPlanUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AddProjectState())
@@ -55,6 +63,40 @@ class AddProjectViewModel @Inject constructor(
 
     fun onEndDateChanged(date: Date) {
         _state.update { it.copy(endDate = date) }
+    }
+
+    fun onAiIdeaChanged(idea: String) {
+        _state.update { it.copy(aiIdea = idea) }
+    }
+
+    fun generateProjectPlan() {
+        if (_state.value.aiIdea.isBlank()) {
+            _state.update { it.copy(generationError = "Please enter an idea to generate a plan.") }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(isGenerating = true, generationError = null) }
+            generateProjectPlanUseCase(_state.value.aiIdea)
+                .onSuccess { plan ->
+                    _state.update {
+                        it.copy(
+                            isGenerating = false,
+                            generatedPlan = plan,
+                            title = plan.title,
+                            description = plan.description
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    _state.update {
+                        it.copy(
+                            isGenerating = false,
+                            generationError = exception.message ?: "An unknown error occurred."
+                        )
+                    }
+                }
+        }
     }
 
     fun addProject() {
@@ -85,6 +127,6 @@ class AddProjectViewModel @Inject constructor(
     }
 
     fun clearError() {
-        _state.update { it.copy(error = null) }
+        _state.update { it.copy(error = null, generationError = null) }
     }
 }

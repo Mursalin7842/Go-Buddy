@@ -15,7 +15,10 @@ import mursalin.companion.gobuddy.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(navController: NavController) {
+fun DashboardScreen(
+    navController: NavController,
+    userName: String
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -45,7 +48,7 @@ fun DashboardScreen(navController: NavController) {
         ) {
             item {
                 Text(
-                    "Welcome Back, Mursalin!",
+                    "Welcome Back, $userName!",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )

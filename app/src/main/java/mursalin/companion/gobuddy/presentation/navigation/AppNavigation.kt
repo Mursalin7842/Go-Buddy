@@ -77,7 +77,10 @@ fun AppNavigation() {
             )
         }
         composable(Screen.Dashboard.route) {
-            DashboardScreen(navController = navController)
+            DashboardScreen(
+                navController = navController,
+                userName = authState.user?.name ?: "User"
+            )
         }
         // This composable was missing, which caused the crash.
         composable(Screen.AddProject.route) {
