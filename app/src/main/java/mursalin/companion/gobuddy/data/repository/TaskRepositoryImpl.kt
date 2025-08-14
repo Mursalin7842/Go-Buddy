@@ -17,7 +17,8 @@ class TaskRepositoryImpl @Inject constructor(
     private val databases: Databases
 ) : TaskRepository {
 
-    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    // Corrected the date format to handle timezone offsets like "+00:00"
+    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
 
     override suspend fun getTasksForProject(projectId: String): Result<List<Task>> {
         return try {
@@ -33,9 +34,7 @@ class TaskRepositoryImpl @Inject constructor(
                     title = document.data["title"] as String,
                     description = document.data["description"] as String,
                     dueDate = isoFormat.parse(document.data["dueDate"] as String) ?: Date(),
-                    // Converts the String from the database to the correct Priority enum
                     priority = Priority.valueOf(document.data["priority"] as String),
-                    // Converts the String from the database to the correct TaskStatus enum
                     status = TaskStatus.valueOf(document.data["status"] as String),
                     isBlocked = document.data["isBlocked"] as Boolean,
                     createdAt = isoFormat.parse(document.data["createdAt"] as String) ?: Date()
@@ -58,7 +57,6 @@ class TaskRepositoryImpl @Inject constructor(
                     "title" to task.title,
                     "description" to task.description,
                     "dueDate" to isoFormat.format(task.dueDate),
-                    // Converts the enum to a String for saving to the database
                     "priority" to task.priority.name,
                     "status" to task.status.name,
                     "isBlocked" to task.isBlocked,
@@ -71,14 +69,13 @@ class TaskRepositoryImpl @Inject constructor(
         }
     }
 
-    // Correctly implements the interface with the TaskStatus enum
     override suspend fun updateTaskStatus(taskId: String, status: TaskStatus): Result<Unit> {
         return try {
             databases.updateDocument(
                 databaseId = DB_ID,
                 collectionId = TASKS_COLLECTION_ID,
                 documentId = taskId,
-                data = mapOf("status" to status.name) // We use .name to save the enum as a string
+                data = mapOf("status" to status.name)
             )
             Result.success(Unit)
         } catch (e: Exception) {

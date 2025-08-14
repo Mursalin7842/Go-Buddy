@@ -4,10 +4,10 @@ import mursalin.companion.gobuddy.domain.model.Project
 import mursalin.companion.gobuddy.domain.repository.ProjectRepository
 import javax.inject.Inject
 
-class GetProjectsUseCase @Inject constructor(
+class GetProjectUseCase @Inject constructor(
     private val repository: ProjectRepository
 ) {
-    suspend operator fun invoke(): Result<List<Project>> {
-        return repository.getProjects()
+    suspend operator fun invoke(projectId: String): Result<Project> {
+        return repository.getProjectById(projectId)
     }
 }

@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 data class DashboardState(
     val projects: List<Project> = emptyList(),
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val error: String? = null
 )
 
@@ -29,9 +29,9 @@ class DashboardViewModel @Inject constructor(
         loadProjects()
     }
 
-    private fun loadProjects() {
+    fun loadProjects() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(isLoading = true, error = null) }
             getProjectsUseCase()
                 .onSuccess { projects ->
                     _state.update { it.copy(isLoading = false, projects = projects) }

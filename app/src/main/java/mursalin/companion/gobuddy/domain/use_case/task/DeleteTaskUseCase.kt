@@ -7,9 +7,6 @@ class DeleteTaskUseCase @Inject constructor(
     private val repository: TaskRepository
 ) {
     suspend operator fun invoke(taskId: String): Result<Unit> {
-        if (taskId.isBlank()) {
-            return Result.failure(IllegalArgumentException("Task ID cannot be empty."))
-        }
         return repository.deleteTask(taskId)
     }
 }
