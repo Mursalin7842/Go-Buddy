@@ -28,6 +28,7 @@ import mursalin.companion.gobuddy.presentation.viewmodel.DashboardViewModel
 @Composable
 fun DashboardScreen(
     navController: NavController,
+    userName: String,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -71,7 +72,7 @@ fun DashboardScreen(
         ) {
             item {
                 Text(
-                    "Welcome Back!",
+                    "Welcome Back, $userName!",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )

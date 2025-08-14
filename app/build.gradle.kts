@@ -11,9 +11,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     // PRODUCTION: Add Hilt and Kapt plugins
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.kapt)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -31,6 +33,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties.getProperty("GEMINI_API_KEY")}\"")
     }
 
     buildTypes {
@@ -41,6 +44,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    // Read API key from local.properties
+    val localProperties = java.util.Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -99,5 +109,10 @@ dependencies {
     // The BOM will manage their versions.
     //implementation(libs.okhttp)
     //implementation(libs.logging.interceptor)
+
+    // Firebase and Gemini AI
+    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation("com.google.firebase:firebase-ai-logic-ktx")
+    implementation(libs.kotlinx.serialization.json)
 }
 
