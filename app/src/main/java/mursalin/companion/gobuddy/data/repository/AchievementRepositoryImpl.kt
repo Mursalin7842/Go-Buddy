@@ -14,7 +14,8 @@ class AchievementRepositoryImpl @Inject constructor(
     private val databases: Databases
 ) : AchievementRepository {
 
-    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    // Corrected the date format to handle timezone offsets like "+00:00"
+    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
 
     override suspend fun getAchievements(): Result<List<Achievement>> {
         return try {

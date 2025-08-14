@@ -2,11 +2,11 @@ package mursalin.companion.gobuddy.data.repository
 
 import io.appwrite.ID
 import io.appwrite.services.Databases
-import mursalin.companion.gobuddy.data.repository.AppwriteConstants.DB_ID
-import mursalin.companion.gobuddy.data.repository.AppwriteConstants.PROJECTS_COLLECTION_ID
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.DB_ID
+import mursalin.companion.gobuddy.data.repository.AppwriteConstants.PROJECTS_COLLECTION_ID
 import mursalin.companion.gobuddy.domain.model.Project
 import mursalin.companion.gobuddy.domain.repository.ProjectRepository
 
@@ -14,7 +14,7 @@ class ProjectRepositoryImpl @Inject constructor(
     private val databases: Databases
 ) : ProjectRepository {
 
-    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
 
     override suspend fun getProjects(): Result<List<Project>> {
         return try {
@@ -38,6 +38,29 @@ class ProjectRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getProjectById(projectId: String): Result<Project> {
+        return try {
+            val document = databases.getDocument(
+                databaseId = DB_ID,
+                collectionId = PROJECTS_COLLECTION_ID,
+                documentId = projectId
+            )
+            val project = Project(
+                id = document.id,
+                userId = document.data["userId"] as String,
+                title = document.data["title"] as String,
+                description = document.data["description"] as String,
+                status = document.data["status"] as String,
+                startDate = isoFormat.parse(document.data["startDate"] as String) ?: Date(),
+                endDate = isoFormat.parse(document.data["endDate"] as String) ?: Date()
+            )
+            Result.success(project)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
     override suspend fun addProject(project: Project): Result<Unit> {
         return try {

@@ -2,20 +2,41 @@ package mursalin.companion.gobuddy.presentation.screens.s03dashboard
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import mursalin.companion.gobuddy.presentation.components.LoadingAnimation
+import mursalin.companion.gobuddy.presentation.components.ProjectCard
 import mursalin.companion.gobuddy.presentation.navigation.Screen
+import mursalin.companion.gobuddy.presentation.viewmodel.DashboardViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(navController: NavController) {
+fun DashboardScreen(
+    navController: NavController,
+    viewModel: DashboardViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsState()
+
+    // This will reload the projects every time the dashboard is shown
+    LaunchedEffect(key1 = Unit) {
+        viewModel.loadProjects()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -24,12 +45,17 @@ fun DashboardScreen(navController: NavController) {
                     IconButton(onClick = { /* TODO: Open drawer */ }) {
                         Icon(Icons.Default.Menu, "Menu")
                     }
+                },
+                actions = {
+                    // Added settings icon button for navigation
+                    IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
+                        Icon(Icons.Default.Settings, "Settings")
+                    }
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                // This navigation call is now correct.
                 navController.navigate(Screen.AddProject.route)
             }) {
                 Icon(Icons.Default.Add, "Add Project")
@@ -45,7 +71,7 @@ fun DashboardScreen(navController: NavController) {
         ) {
             item {
                 Text(
-                    "Welcome Back, Mursalin!",
+                    "Welcome Back!",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -64,8 +90,8 @@ fun DashboardScreen(navController: NavController) {
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("• Design the new login screen.")
-                        Text("• Fix the bug in the payment gateway.")
+                        Text("• Finalize the project proposal.")
+                        Text("• Prepare for the team meeting.")
                     }
                 }
             }
@@ -73,7 +99,8 @@ fun DashboardScreen(navController: NavController) {
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         "Projects Overview",
@@ -84,9 +111,39 @@ fun DashboardScreen(navController: NavController) {
                         Text("View All")
                     }
                 }
-                // TODO: Display a list of recent projects here
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("No projects yet. Add one to get started!")
+            }
+
+            if (state.isLoading) {
+                item {
+                    LoadingAnimation(modifier = Modifier.fillMaxWidth())
+                }
+            } else if (state.error != null) {
+                item {
+                    Text(
+                        text = state.error!!,
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            } else if (state.projects.isEmpty()) {
+                item {
+                    Text(
+                        "No projects yet. Add one to get started!",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+                    )
+                }
+            } else {
+                items(state.projects.take(3)) { project ->
+                    ProjectCard(
+                        project = project,
+                        onClick = {
+                            navController.navigate(Screen.TaskBoard.createRoute(project.id))
+                        }
+                    )
+                }
             }
         }
     }
