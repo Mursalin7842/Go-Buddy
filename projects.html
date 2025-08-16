@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Buddy - Projects</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div>
+                <h1>GO Buddy</h1>
+                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
+            </div>
+            <button id="theme-toggle">🌓</button>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="projects.html" class="active">Projects</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="auth.html">Login/Signup</a></li>
+                <li><a href="chatbot.html">AI Chat</a></li>
+                <li><a href="mindmap.html">Mind Map</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h2>All Projects</h2>
+                <button class="button-primary">+ Create Project</button>
+            </div>
+
+            <div class="project-list">
+                <div class="card project-item-card">
+                    <div class="project-info">
+                        <h3>GO Buddy Website</h3>
+                        <p>Status: <span class="status in-progress">In Progress</span></p>
+                        <p>Deadline: 2024-12-31</p>
+                    </div>
+                    <div class="project-actions">
+                        <button>Edit</button>
+                        <button class="button-danger">Delete</button>
+                    </div>
+                </div>
+                <div class="card project-item-card">
+                    <div class="project-info">
+                        <h3>Mobile App Development</h3>
+                        <p>Status: <span class="status on-hold">On Hold</span></p>
+                        <p>Deadline: 2025-03-15</p>
+                    </div>
+                    <div class="project-actions">
+                        <button>Edit</button>
+                        <button class="button-danger">Delete</button>
+                    </div>
+                </div>
+                <div class="card project-item-card">
+                    <div class="project-info">
+                        <h3>Marketing Campaign</h3>
+                        <p>Status: <span class="status completed">Completed</span></p>
+                        <p>Deadline: 2024-07-30</p>
+                    </div>
+                    <div class="project-actions">
+                        <button>Edit</button>
+                        <button class="button-danger">Delete</button>
+                    </div>
+                </div>
+                 <div class="card project-item-card">
+                    <div class="project-info">
+                        <h3>New Client Pitch</h3>
+                        <p>Status: <span class="status in-progress">In Progress</span></p>
+                        <p>Deadline: 2024-09-30</p>
+                    </div>
+                    <div class="project-actions">
+                        <button>Edit</button>
+                        <button class="button-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GO Buddy</p>
+        </div>
+    </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

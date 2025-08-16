@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Buddy - Project Mind Map</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div>
+                <h1>GO Buddy</h1>
+                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
+            </div>
+            <button id="theme-toggle">🌓</button>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="auth.html">Login/Signup</a></li>
+                <li><a href="chatbot.html">AI Chat</a></li>
+                <li><a href="mindmap.html" class="active">Mind Map</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h2>Project Mind Map: GO Buddy Website</h2>
+            </div>
+            <div class="mindmap-container card">
+                <p>This is a visual representation of your project. Each node represents a task, and the lines show dependencies.</p>
+                <img src="assets/mindmap-placeholder.png" alt="Project Mind Map" style="width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+                 <p style="text-align: center; font-style: italic; color: #888;">[Placeholder for Mind Map Image]</p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GO Buddy</p>
+        </div>
+    </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

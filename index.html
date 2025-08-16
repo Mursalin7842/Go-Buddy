@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Buddy - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div>
+                <h1>GO Buddy</h1>
+                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
+            </div>
+            <button id="theme-toggle">🌓</button>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html" class="active">Dashboard</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="auth.html">Login/Signup</a></li>
+                <li><a href="chatbot.html">AI Chat</a></li>
+                <li><a href="mindmap.html">Mind Map</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Dashboard</h2>
+                <div class="dashboard-actions">
+                    <button class="button-primary">+ Add Task</button>
+                    <button>+ Add Project</button>
+                </div>
+            </div>
+
+            <section class="motivational-quote">
+                <p>"The secret of getting ahead is getting started." - Mark Twain</p>
+            </section>
+
+            <section class="today-focus">
+                <h3>Today's Focus</h3>
+                <div class="card">
+                    <div class="task-item">
+                        <p><strong>Finish the UI mockup for the GO Buddy website.</strong></p>
+                        <span>Project: GO Buddy Website</span>
+                    </div>
+                    <div class="task-item">
+                        <p><strong>Call the client for feedback.</strong></p>
+                        <span>Project: GO Buddy Website</span>
+                    </div>
+                    <div class="task-item">
+                        <p><strong>Draft the project proposal.</strong></p>
+                        <span>Project: New Client Pitch</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="project-summary">
+                <h3>Project Summary</h3>
+                <div class="card">
+                    <div class="project-item">
+                        <h4>GO Buddy Website</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 60%;"></div>
+                        </div>
+                        <p>60% Complete</p>
+                    </div>
+                    <div class="project-item">
+                        <h4>Mobile App Development</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 30%;"></div>
+                        </div>
+                        <p>30% Complete</p>
+                    </div>
+                     <div class="project-item">
+                        <h4>Marketing Campaign</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 85%;"></div>
+                        </div>
+                        <p>85% Complete</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GO Buddy</p>
+        </div>
+    </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

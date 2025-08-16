@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Buddy - AI Chatbot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div>
+                <h1>GO Buddy</h1>
+                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
+            </div>
+            <button id="theme-toggle">🌓</button>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="auth.html">Login/Signup</a></li>
+                <li><a href="chatbot.html" class="active">AI Chat</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h2>AI Chat Assistant</h2>
+            </div>
+            <div class="chatbot-container">
+                <div class="chat-window">
+                    <div class="chat-message bot">
+                        <p>Hello! I'm GO Buddy's AI assistant. How can I help you today? You can ask me to "Break down a task", "Plan your day", or "Suggest next steps for a project".</p>
+                    </div>
+                    <div class="chat-message user">
+                        <p>Plan my day</p>
+                    </div>
+                    <div class="chat-message bot">
+                        <p>Of course! Based on your projects and tasks, here is a suggested plan for your day:</p>
+                        <ul>
+                            <li><strong>9:00 AM - 11:00 AM:</strong> Work on 'Implement the dashboard UI' for the 'GO Buddy Website' project.</li>
+                            <li><strong>11:00 AM - 12:00 PM:</strong> Call the client for feedback.</li>
+                            <li><strong>1:00 PM - 3:00 PM:</strong> Draft the project proposal for the 'New Client Pitch'.</li>
+                            <li><strong>3:00 PM - 4:00 PM:</strong> Review and organize your task list.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Type your message...">
+                    <button class="button-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GO Buddy</p>
+        </div>
+    </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+/* Basic Styles */
+:root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --secondary-color: #6c757d;
+    --secondary-hover-color: #5a6268;
+    --background-color: #f4f7f9;
+    --text-color: #333;
+    --card-bg-color: #fff;
+    --border-color: #e0e0e0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin-bottom: 0.2rem;
+}
+
+nav {
+    background: #333;
+    color: #fff;
+    padding: 0.5rem 0;
+}
+
+nav ul {
+    padding: 0;
+    list-style: none;
+    text-align: center;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s;
+}
+
+nav a:hover, nav a.active {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+main {
+    padding: 20px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #333;
+    color: #fff;
+    margin-top: 2rem;
+}
+
+h2, h3 {
+    color: var(--text-color);
+}
+
+/* Dashboard Specific */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-actions button {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+.dashboard-actions .button-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dashboard-actions .button-primary:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.dashboard-actions button:last-child {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.dashboard-actions button:last-child:hover {
+     background-color: var(--secondary-hover-color);
+}
+
+.card {
+    background: var(--card-bg-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.motivational-quote {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.task-item, .project-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.task-item:last-child, .project-item:last-child {
+    border-bottom: none;
+}
+
+.task-item span {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.project-item h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+.progress {
+    background: var(--primary-color);
+    height: 100%;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    font-size: 0.8rem;
+}
+
+#theme-toggle {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: all 0.3s;
+}
+#theme-toggle:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Dark Mode */
+body.dark-mode {
+    --background-color: #1a1a1a;
+    --text-color: #f4f4f4;
+    --card-bg-color: #252525;
+    --border-color: #333;
+    --primary-color: #0056b3;
+    --primary-hover-color: #007bff;
+}
+
+body.dark-mode .motivational-quote {
+    color: #aaa;
+}
+
+body.dark-mode .task-item span {
+    color: #aaa;
+}
+body.dark-mode .progress-bar {
+    background: #444;
+}
+
+/* Projects Page */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.page-header .button-primary {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.page-header .button-primary:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.project-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-info h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.project-info p {
+    margin: 0.2rem 0;
+    color: #666;
+}
+
+body.dark-mode .project-info p {
+    color: #aaa;
+}
+
+.status {
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.status.in-progress { background-color: #ffc107; color: #333; }
+.status.on-hold { background-color: #6c757d; }
+.status.completed { background-color: #28a745; }
+
+.project-actions button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+body.dark-mode .project-actions button {
+    background-color: #333;
+    border-color: #555;
+    color: #f4f4f4;
+}
+
+
+.project-actions button:hover {
+    background-color: #e0e0e0;
+}
+
+body.dark-mode .project-actions button:hover {
+    background-color: #444;
+}
+
+.project-actions .button-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.project-actions .button-danger:hover {
+    background-color: #c82333;
+}
+
+/* Task Board / Kanban */
+.kanban-board {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    min-height: 50vh;
+}
+
+.kanban-column {
+    flex: 1;
+    min-width: 280px;
+    max-width: 320px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: border-color 0.3s;
+}
+
+body.dark-mode .kanban-column {
+    background-color: #343a40;
+}
+
+.kanban-column h3 {
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ccc;
+}
+
+body.dark-mode .kanban-column h3 {
+    border-bottom-color: #444;
+}
+
+.task-card {
+    background: var(--card-bg-color);
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: grab;
+    transition: opacity 0.3s;
+}
+
+.task-card p {
+    margin: 0;
+}
+
+.task-card .priority {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.priority.high { background-color: #dc3545; color: white; }
+.priority.medium { background-color: #ffc107; color: #333; }
+.priority.low { background-color: #28a745; color: white; }
+
+.task-card.dragging {
+    opacity: 0.5;
+}
+
+.kanban-column.drag-over {
+    border: 2px dashed var(--primary-color);
+}
+
+/* Auth Page */
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.auth-form h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Important */
+}
+
+body.dark-mode .form-group input {
+    background-color: #333;
+    border-color: #555;
+    color: #f4f4f4;
+}
+
+.auth-form .button-primary {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.auth-form .button-primary:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.auth-switch, .forgot-password {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.auth-switch a, .forgot-password a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.auth-switch a:hover, .forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Chatbot */
+.chatbot-container {
+    max-width: 800px;
+    margin: auto;
+    background: var(--card-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.chat-window {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.chat-message p, .chat-message ul {
+    max-width: 80%;
+    padding: 0.8rem;
+    border-radius: 10px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.chat-message ul {
+    list-style-position: inside;
+}
+
+.chat-message.bot p, .chat-message.bot ul {
+    background-color: #e9ecef;
+}
+body.dark-mode .chat-message.bot p, body.dark-mode .chat-message.bot ul {
+    background-color: #343a40;
+}
+
+
+.chat-message.user {
+    justify-content: flex-end;
+}
+
+.chat-message.user p {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.chat-input {
+    display: flex;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 1rem;
+    box-sizing: border-box;
+}
+
+body.dark-mode .chat-input input {
+    background-color: #333;
+    border-color: #555;
+    color: #f4f4f4;
+}
+
+.chat-input .button-primary {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.chat-input .button-primary:hover {
+    background-color: var(--primary-hover-color);
+}
