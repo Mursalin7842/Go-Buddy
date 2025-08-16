@@ -3,103 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GO Buddy - Dashboard</title>
+    <title>GO Buddy</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div>
-                <h1>GO Buddy</h1>
-                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
-            </div>
-            <button id="theme-toggle">🌓</button>
-        </div>
-    </header>
-    <nav>
-        <div class="container">
-            <ul>
-                <li><a href="index.html" class="active">Dashboard</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="tasks.html">Tasks</a></li>
-                <li><a href="auth.html">Login/Signup</a></li>
-                <li><a href="chatbot.html">AI Chat</a></li>
-                <li><a href="mindmap.html">Mind Map</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main>
-        <div class="container">
-            <div class="dashboard-header">
-                <h2>Dashboard</h2>
-                <div class="dashboard-actions">
-                    <button class="button-primary">+ Add Task</button>
-                    <button>+ Add Project</button>
+    <div class="mobile-app-container">
+        <div class="mobile-screen">
+            <main class="app-content">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
                 </div>
-            </div>
 
-            <section class="motivational-quote">
-                <p>"The secret of getting ahead is getting started." - Mark Twain</p>
-            </section>
-
-            <section class="today-focus">
-                <h3>Today's Focus</h3>
-                <div class="card">
-                    <div class="task-item">
-                        <p><strong>Finish the UI mockup for the GO Buddy website.</strong></p>
-                        <span>Project: GO Buddy Website</span>
-                    </div>
-                    <div class="task-item">
-                        <p><strong>Call the client for feedback.</strong></p>
-                        <span>Project: GO Buddy Website</span>
-                    </div>
-                    <div class="task-item">
-                        <p><strong>Draft the project proposal.</strong></p>
-                        <span>Project: New Client Pitch</span>
-                    </div>
+                <div class="welcome-message">
+                    <h3>Welcome back, Alex!</h3>
+                    <p>You have 3 urgent tasks for today.</p>
                 </div>
-            </section>
 
-            <section class="project-summary">
-                <h3>Project Summary</h3>
-                <div class="card">
-                    <div class="project-item">
-                        <h4>GO Buddy Website</h4>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 60%;"></div>
-                        </div>
-                        <p>60% Complete</p>
-                    </div>
-                    <div class="project-item">
-                        <h4>Mobile App Development</h4>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 30%;"></div>
-                        </div>
-                        <p>30% Complete</p>
-                    </div>
-                     <div class="project-item">
-                        <h4>Marketing Campaign</h4>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 85%;"></div>
-                        </div>
-                        <p>85% Complete</p>
-                    </div>
+                <div class="card notification-card">
+                    <p><strong>Upcoming Meeting:</strong> Project Sync-up at <strong>2:00 PM</strong></p>
+                    <a href="#" class="button-secondary">Join</a>
                 </div>
-            </section>
-        </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GO Buddy</p>
-        </div>
-    </footer>
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
 
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-        });
-    </script>
+                <section class="dashboard-section">
+                    <h4>Today's Focus</h4>
+                    <div class="task-list">
+                        <div class="card task-item">
+                            <p><strong>Deploy the final build for 'Project Cybershield'.</strong></p>
+                            <span>Project: Project Cybershield</span>
+                        </div>
+                        <div class="card task-item">
+                            <p><strong>Review the new wireframes for the 'Neuro-Link' interface.</strong></p>
+                            <span>Project: Neuro-Link UI</span>
+                        </div>
+                         <div class="card task-item">
+                            <p><strong>Fix the critical bug in the authentication module.</strong></p>
+                            <span>Project: Internal Systems</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-section">
+                    <h4>Project Summary</h4>
+                    <div class="project-list">
+                        <div class="card project-item">
+                            <h5>Project Cybershield</h5>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 90%;"></div>
+                            </div>
+                            <p>90% Complete</p>
+                        </div>
+                        <div class="card project-item">
+                            <h5>Neuro-Link UI</h5>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 45%;"></div>
+                            </div>
+                            <p>45% Complete</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <a href="#" class="fab">+</a>
+            <nav class="bottom-nav">
+                <a href="index.html" class="nav-item active"><span>🏠</span><label>Home</label></a>
+                <a href="projects.html" class="nav-item"><span>📁</span><label>Projects</label></a>
+                <a href="tasks.html" class="nav-item"><span>✅</span><label>Tasks</label></a>
+                <a href="mindmap.html" class="nav-item"><span>🧠</span><label>Mind Map</label></a>
+                <a href="chatbot.html" class="nav-item"><span>🤖</span><label>Chat</label></a>
+                <a href="gemini-plan.html" class="nav-item"><span>✨</span><label>AI Plan</label></a>
+                <a href="prescriptions.html" class="nav-item"><span>💊</span><label>Meds</label></a>
+                <a href="auth.html" class="nav-item"><span>👤</span><label>Profile</label></a>
+            </nav>
+        </div>
+    </div>
 </body>
 </html>

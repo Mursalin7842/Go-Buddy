@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Buddy - AI Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="mobile-app-container">
+        <div class="mobile-screen">
+            <main class="app-content">
+                <div class="page-header">
+                    <h2>AI Project Planner</h2>
+                </div>
+                <div class="gemini-plan-container">
+                    <p>Describe your project goal, and our AI will generate a plan for you.</p>
+                    <form>
+                        <div class="form-group">
+                            <input type="text" placeholder="e.g., Launch a new marketing website" id="project-goal">
+                        </div>
+                        <button type="button" class="button-primary" id="generate-plan-btn">✨ Generate Plan</button>
+                    </form>
+                    <div class="generated-plan" id="generated-plan" style="display: none;">
+                        <h4 style="margin-top: 20px;">Generated Plan for "Launch a new marketing website"</h4>
+                        <div class="card">
+                            <h5>Phase 1: Discovery & Planning</h5>
+                            <ul>
+                                <li>Define project goals and KPIs</li>
+                                <li>Create user personas</li>
+                                <li>Plan site architecture and navigation</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                             <h5>Phase 2: Design</h5>
+                            <ul>
+                                <li>Create wireframes</li>
+                                <li>Design UI mockups</li>
+                                <li>Prototype key user flows</li>
+                            </ul>
+                        </div>
+                         <div class="card">
+                             <h5>Phase 3: Development & Launch</h5>
+                            <ul>
+                                <li>Set up development environment</li>
+                                <li>Build and test pages</li>
+                                <li>Deploy website</li>
+                            </ul>
+                        </div>
+                        <button class="button-primary">Add to My Projects</button>
+                    </div>
+                </div>
+            </main>
+            <nav class="bottom-nav">
+                <a href="index.html" class="nav-item"><span>🏠</span><label>Home</label></a>
+                <a href="projects.html" class="nav-item"><span>📁</span><label>Projects</label></a>
+                <a href="tasks.html" class="nav-item"><span>✅</span><label>Tasks</label></a>
+                <a href="mindmap.html" class="nav-item"><span>🧠</span><label>Mind Map</label></a>
+                <a href="chatbot.html" class="nav-item"><span>🤖</span><label>Chat</label></a>
+                <a href="gemini-plan.html" class="nav-item active"><span>✨</span><label>AI Plan</label></a>
+                <a href="prescriptions.html" class="nav-item"><span>💊</span><label>Meds</label></a>
+                <a href="auth.html" class="nav-item"><span>👤</span><label>Profile</label></a>
+            </nav>
+        </div>
+    </div>
+    <script>
+        document.getElementById('generate-plan-btn').addEventListener('click', () => {
+            document.getElementById('generated-plan').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

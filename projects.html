@@ -3,98 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GO Buddy - Projects</title>
+    <title>GO Buddy</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div>
-                <h1>GO Buddy</h1>
-                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
-            </div>
-            <button id="theme-toggle">🌓</button>
-        </div>
-    </header>
-    <nav>
-        <div class="container">
-            <ul>
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="projects.html" class="active">Projects</a></li>
-                <li><a href="tasks.html">Tasks</a></li>
-                <li><a href="auth.html">Login/Signup</a></li>
-                <li><a href="chatbot.html">AI Chat</a></li>
-                <li><a href="mindmap.html">Mind Map</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main>
-        <div class="container">
-            <div class="page-header">
-                <h2>All Projects</h2>
-                <button class="button-primary">+ Create Project</button>
-            </div>
+    <div class="mobile-app-container">
+        <div class="mobile-screen">
+            <main class="app-content">
+                <div class="page-header">
+                    <h2>Projects</h2>
+                </div>
 
-            <div class="project-list">
-                <div class="card project-item-card">
-                    <div class="project-info">
-                        <h3>GO Buddy Website</h3>
-                        <p>Status: <span class="status in-progress">In Progress</span></p>
-                        <p>Deadline: 2024-12-31</p>
+                <div class="project-list">
+                    <div class="card project-card">
+                        <div class="project-card-info">
+                            <h3>Project Cybershield</h3>
+                            <p>Deadline: 2024-12-31</p>
+                             <div class="team-avatars">
+                                <span class="avatar">J</span>
+                                <span class="avatar">S</span>
+                            </div>
+                        </div>
+                        <div class="project-card-actions">
+                             <span class="status-badge in-progress">In Progress</span>
+                            <button class="options-button">⋮</button>
+                        </div>
                     </div>
-                    <div class="project-actions">
-                        <button>Edit</button>
-                        <button class="button-danger">Delete</button>
+                    <div class="card project-card">
+                        <div class="project-card-info">
+                            <h3>Neuro-Link UI</h3>
+                            <p>Deadline: 2025-03-15</p>
+                            <div class="team-avatars">
+                                <span class="avatar">A</span>
+                            </div>
+                        </div>
+                        <div class="project-card-actions">
+                            <span class="status-badge on-hold">On Hold</span>
+                            <button class="options-button">⋮</button>
+                        </div>
+                    </div>
+                    <div class="card project-card">
+                        <div class="project-card-info">
+                            <h3>Data Heist Simulation</h3>
+                            <p>Deadline: 2024-07-30</p>
+                             <div class="team-avatars">
+                                <span class="avatar">M</span>
+                                <span class="avatar">L</span>
+                                <span class="avatar">K</span>
+                            </div>
+                        </div>
+                        <div class="project-card-actions">
+                             <span class="status-badge completed">Completed</span>
+                            <button class="options-button">⋮</button>
+                        </div>
+                    </div>
+                     <div class="card project-card">
+                        <div class="project-card-info">
+                            <h3>AI Consciousness Study</h3>
+                            <p>Deadline: 2025-06-01</p>
+                             <div class="team-avatars">
+                                <span class="avatar">C</span>
+                            </div>
+                        </div>
+                        <div class="project-card-actions">
+                             <span class="status-badge in-progress">In Progress</span>
+                            <button class="options-button">⋮</button>
+                        </div>
                     </div>
                 </div>
-                <div class="card project-item-card">
-                    <div class="project-info">
-                        <h3>Mobile App Development</h3>
-                        <p>Status: <span class="status on-hold">On Hold</span></p>
-                        <p>Deadline: 2025-03-15</p>
-                    </div>
-                    <div class="project-actions">
-                        <button>Edit</button>
-                        <button class="button-danger">Delete</button>
-                    </div>
-                </div>
-                <div class="card project-item-card">
-                    <div class="project-info">
-                        <h3>Marketing Campaign</h3>
-                        <p>Status: <span class="status completed">Completed</span></p>
-                        <p>Deadline: 2024-07-30</p>
-                    </div>
-                    <div class="project-actions">
-                        <button>Edit</button>
-                        <button class="button-danger">Delete</button>
-                    </div>
-                </div>
-                 <div class="card project-item-card">
-                    <div class="project-info">
-                        <h3>New Client Pitch</h3>
-                        <p>Status: <span class="status in-progress">In Progress</span></p>
-                        <p>Deadline: 2024-09-30</p>
-                    </div>
-                    <div class="project-actions">
-                        <button>Edit</button>
-                        <button class="button-danger">Delete</button>
-                    </div>
-                </div>
-            </div>
+            </main>
+            <a href="#" class="fab">+</a>
+            <nav class="bottom-nav">
+                <a href="index.html" class="nav-item"><span>🏠</span><label>Home</label></a>
+                <a href="projects.html" class="nav-item active"><span>📁</span><label>Projects</label></a>
+                <a href="tasks.html" class="nav-item"><span>✅</span><label>Tasks</label></a>
+                <a href="mindmap.html" class="nav-item"><span>🧠</span><label>Mind Map</label></a>
+                <a href="chatbot.html" class="nav-item"><span>🤖</span><label>Chat</label></a>
+                <a href="gemini-plan.html" class="nav-item"><span>✨</span><label>AI Plan</label></a>
+                <a href="prescriptions.html" class="nav-item"><span>💊</span><label>Meds</label></a>
+                <a href="auth.html" class="nav-item"><span>👤</span><label>Profile</label></a>
+            </nav>
         </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GO Buddy</p>
-        </div>
-    </footer>
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-        });
-    </script>
+    </div>
 </body>
 </html>

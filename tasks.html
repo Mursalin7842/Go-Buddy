@@ -3,138 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GO Buddy - Task Board</title>
+    <title>GO Buddy</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div>
-                <h1>GO Buddy</h1>
-                <p>Your AI-powered project partner to manage, motivate, and move forward.</p>
-            </div>
-            <button id="theme-toggle">🌓</button>
-        </div>
-    </header>
-    <nav>
-        <div class="container">
-            <ul>
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="tasks.html" class="active">Tasks</a></li>
-                <li><a href="auth.html">Login/Signup</a></li>
-                <li><a href="chatbot.html">AI Chat</a></li>
-                <li><a href="mindmap.html">Mind Map</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main>
-        <div class="container">
-            <div class="page-header">
-                <h2>Task Board: GO Buddy Website</h2>
-                <button class="button-primary">+ Add Task</button>
-            </div>
+    <div class="mobile-app-container">
+        <div class="mobile-screen">
+            <main class="app-content">
+                <div class="page-header">
+                    <h2>Task Board: Project Cybershield</h2>
+                </div>
 
-            <div class="kanban-board">
-                <div class="kanban-column" id="todo">
-                    <h3>To Do</h3>
-                    <div class="task-card" draggable="true">
-                        <p>Design the landing page</p>
-                        <span class="priority high">High</span>
+                <div class="kanban-board-mobile">
+                    <div class="kanban-column-mobile">
+                        <h3>To Do</h3>
+                        <div class="card task-card-mobile">
+                            <p>Bypass the ICE security protocol.</p>
+                            <div class="task-card-footer">
+                                <span class="priority-badge high">High</span>
+                                <span class="avatar">J</span>
+                            </div>
+                        </div>
+                        <div class="card task-card-mobile">
+                            <p>Source the neuro-link hardware.</p>
+                             <div class="task-card-footer">
+                                <span class="priority-badge medium">Medium</span>
+                                <span class="avatar">S</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="task-card" draggable="true">
-                        <p>Set up the database</p>
-                        <span class="priority medium">Medium</span>
+                    <div class="kanban-column-mobile">
+                        <h3>Doing</h3>
+                        <div class="card task-card-mobile">
+                            <p>Calibrate the plasma cannons.</p>
+                             <div class="task-card-footer">
+                                <span class="priority-badge high">High</span>
+                                <span class="avatar">A</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kanban-column-mobile">
+                        <h3>Done</h3>
+                        <div class="card task-card-mobile">
+                            <p>Assemble the stealth drone.</p>
+                             <div class="task-card-footer">
+                                <span class="priority-badge low">Low</span>
+                                <span class="avatar">M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kanban-column-mobile">
+                        <h3>Stuck</h3>
+                         <div class="card task-card-mobile">
+                            <p>AI is refusing to cooperate.</p>
+                             <div class="task-card-footer">
+                                <span class="priority-badge high">High</span>
+                                <span class="avatar">C</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="kanban-column" id="doing">
-                    <h3>Doing</h3>
-                    <div class="task-card" draggable="true">
-                        <p>Implement the dashboard UI</p>
-                        <span class="priority high">High</span>
-                    </div>
-                </div>
-                <div class="kanban-column" id="done">
-                    <h3>Done</h3>
-                    <div class="task-card" draggable="true">
-                        <p>Create the project plan</p>
-                         <span class="priority low">Low</span>
-                    </div>
-                </div>
-                <div class="kanban-column" id="stuck">
-                    <h3>Stuck</h3>
-                    <div class="task-card" draggable="true">
-                        <p>Resolve the API integration issue</p>
-                         <span class="priority high">High</span>
-                    </div>
-                </div>
-            </div>
+            </main>
+            <a href="#" class="fab">+</a>
+            <nav class="bottom-nav">
+                <a href="index.html" class="nav-item"><span>🏠</span><label>Home</label></a>
+                <a href="projects.html" class="nav-item"><span>📁</span><label>Projects</label></a>
+                <a href="tasks.html" class="nav-item active"><span>✅</span><label>Tasks</label></a>
+                <a href="mindmap.html" class="nav-item"><span>🧠</span><label>Mind Map</label></a>
+                <a href="chatbot.html" class="nav-item"><span>🤖</span><label>Chat</label></a>
+                <a href="gemini-plan.html" class="nav-item"><span>✨</span><label>AI Plan</label></a>
+                <a href="prescriptions.html" class="nav-item"><span>💊</span><label>Meds</label></a>
+                <a href="auth.html" class="nav-item"><span>👤</span><label>Profile</label></a>
+            </nav>
         </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 GO Buddy</p>
-        </div>
-    </footer>
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-        });
-
-        // Drag and Drop functionality
-        const taskCards = document.querySelectorAll('.task-card');
-        const columns = document.querySelectorAll('.kanban-column');
-
-        taskCards.forEach(card => {
-            card.addEventListener('dragstart', () => {
-                card.classList.add('dragging');
-            });
-
-            card.addEventListener('dragend', () => {
-                card.classList.remove('dragging');
-            });
-        });
-
-        columns.forEach(column => {
-            column.addEventListener('dragover', e => {
-                e.preventDefault();
-                const afterElement = getDragAfterElement(column, e.clientY);
-                const dragging = document.querySelector('.dragging');
-                if (dragging) { // Ensure there is a dragging element
-                    if (afterElement == null) {
-                        column.appendChild(dragging);
-                    } else {
-                        column.insertBefore(dragging, afterElement);
-                    }
-                }
-                column.classList.add('drag-over');
-            });
-
-            column.addEventListener('dragleave', () => {
-                column.classList.remove('drag-over');
-            });
-
-            column.addEventListener('drop', (e) => {
-                e.preventDefault();
-                column.classList.remove('drag-over');
-            });
-        });
-
-        function getDragAfterElement(column, y) {
-            const draggableElements = [...column.querySelectorAll('.task-card:not(.dragging)')];
-
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-    </script>
+    </div>
 </body>
 </html>
